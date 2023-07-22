@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    *::-moz-selection {
+        @apply bg-neutral-400 text-white;
+    }
+    *::selection {
+        @apply bg-neutral-400 text-white;
+    }
+    .category-link {
+        @apply cursor-pointer;
+    }
+    .category-link.active {
+        @apply underline;
+    }
+    body {
+        @apply bg-neutral-50;
+    }
+    html, body {
+        height: 100%;
+    }
+    #goods-min {
+        @apply lg:grid lg:grid-cols-4 gap-x-16;
+    }
+    .goods-carousel {
+        min-height: 75% !important;
+    }
+    #goods-min > div > div {
+        gap: 0px !important;
+    }
+    .card-one-goods {
+        padding-left: 20%;
+    }
+    /*.goods-card {
+        height: 500px !important;
+    }*/
+}
