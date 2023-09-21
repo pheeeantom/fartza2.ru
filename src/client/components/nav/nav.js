@@ -49,7 +49,7 @@ function Nav(props) {
                 this.props.updateGoods(reject.error);
             });*/
             //this.props.fetchAllGoods({ ...lastArgs, sort: 'popular' });
-			dispatch(setLastArgs({ ...lastArgs, sort: 'popular' }));
+			dispatch(setLastArgs({ ...lastArgs, sort: 'popular', since: 0 }));
         }
         else if (props.name == "Новые") {
             /*const url = new URL(window.location);
@@ -68,10 +68,13 @@ function Nav(props) {
                 this.props.updateGoods(reject.error);
             });*/
             //this.props.fetchAllGoods({ ...lastArgs, sort: 'new' });
-			dispatch(setLastArgs({ ...lastArgs, sort: 'new' }));
+			dispatch(setLastArgs({ ...lastArgs, sort: 'new', since: 0 }));
         }
         else if (props.name == 'Ближайшие') {
-            dispatch(setLastArgs({ ...lastArgs, sort: 'distance' }));
+            dispatch(setLastArgs({ ...lastArgs, sort: 'distance', since: 0 }));
+        }
+        else if (props.name == 'Подписки') {
+            dispatch(setLastArgs({ ...lastArgs, sort: 'subscriptions', since: 0 }));
         }
     }
 

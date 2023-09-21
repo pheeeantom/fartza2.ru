@@ -166,7 +166,8 @@ function Nav(props) {
       });*/
       //this.props.fetchAllGoods({ ...lastArgs, sort: 'popular' });
       dispatch((0,_store_reducers_goods_slice__WEBPACK_IMPORTED_MODULE_1__.setLastArgs)(_objectSpread(_objectSpread({}, lastArgs), {}, {
-        sort: 'popular'
+        sort: 'popular',
+        since: 0
       })));
     } else if (props.name == "Новые") {
       /*const url = new URL(window.location);
@@ -186,11 +187,18 @@ function Nav(props) {
       });*/
       //this.props.fetchAllGoods({ ...lastArgs, sort: 'new' });
       dispatch((0,_store_reducers_goods_slice__WEBPACK_IMPORTED_MODULE_1__.setLastArgs)(_objectSpread(_objectSpread({}, lastArgs), {}, {
-        sort: 'new'
+        sort: 'new',
+        since: 0
       })));
     } else if (props.name == 'Ближайшие') {
       dispatch((0,_store_reducers_goods_slice__WEBPACK_IMPORTED_MODULE_1__.setLastArgs)(_objectSpread(_objectSpread({}, lastArgs), {}, {
-        sort: 'distance'
+        sort: 'distance',
+        since: 0
+      })));
+    } else if (props.name == 'Подписки') {
+      dispatch((0,_store_reducers_goods_slice__WEBPACK_IMPORTED_MODULE_1__.setLastArgs)(_objectSpread(_objectSpread({}, lastArgs), {}, {
+        sort: 'subscriptions',
+        since: 0
       })));
     }
   }
@@ -239,7 +247,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nav__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./nav */ "./src/client/components/nav/nav.js");
 /* harmony import */ var _logreg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./logreg */ "./src/client/components/nav/logreg.js");
 /* harmony import */ var _links__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./links */ "./src/client/components/nav/links.js");
-/* harmony import */ var _styles_output_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../styles/output.css */ "./src/client/styles/output.css");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -250,6 +257,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+//import '../../styles/output.css';
 
 function NavBar(props) {
   /*constructor(props) {

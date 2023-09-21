@@ -25,14 +25,21 @@ export const goodsAPI = createApi({
             })
         }),
         fetchGoodsById: build.query({
-            query: (id) => ({
-                url: `/goods/${id}`
+            query: ({ id, args }) => ({
+                url: `/goods/${id}`,
+                params: args
+            })
+        }),
+        fetchGoodsByNick: build.query({
+            query: (args) => ({
+                url: `/goods/nick/${args.nick}`,
+                params: {since: args.since, lat: args.lat, lon: args.lon}
             })
         })
     })
 });
 
-export const { useFetchAllGoodsQuery, useFetchAllGoodsCatsQuery, useFetchGoodsByIdQuery } = goodsAPI;
+export const { useFetchAllGoodsQuery, useFetchAllGoodsCatsQuery, useFetchGoodsByIdQuery, useFetchGoodsByNickQuery } = goodsAPI;
 
 
 

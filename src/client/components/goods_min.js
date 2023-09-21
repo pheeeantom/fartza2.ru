@@ -9,6 +9,8 @@ import { Card } from 'flowbite-react';
 import { useFetchAllGoodsCatsQuery, useFetchAllGoodsQuery } from '../store/services/goods_service';
 import { calcCrow } from '../math/distance';
 import { useEffect } from 'react';
+import { useFetchGoodsByNickQuery } from '../store/services/goods_service';
+import { useGetFavoritesQuery } from '../store/services/users_service';
 
 function GoodsMin(props) {
 //	unsubscribe = null;
@@ -91,15 +93,18 @@ function GoodsMin(props) {
 	const dispatch = useDispatch()
 
 	const lastArgs = useSelector((state) => state.goodsReducer.lastArgs);
-	const activeCategoryName = useSelector((state) => state.categoriesReducer.activeCategoryName);
 
 	let query
     if (lastArgs.category)
         query = useFetchAllGoodsCatsQuery
+	else if (props.option === "profile") 
+		query = useFetchGoodsByNickQuery
+	else if (props.option === "favorites")
+		query = useGetFavoritesQuery
     else
         query = useFetchAllGoodsQuery
 
-    const { data, error, isLoading } = query(lastArgs)
+    const { data, error, isLoading } = query(props.option !== "profile" ? lastArgs : { ...lastArgs, nick: window.location.pathname.split('/').pop() || window.location.pathname.split('/').slice(0, -1).pop()})
 
 	//componentDidUpdate(prevProps) {
 		/*let fetch = this.props.lastArgs?.category ? this.props.fetchAllGoodsCatsState : this.props.fetchAllGoodsState
@@ -273,9 +278,16 @@ function GoodsMin(props) {
 			rows = error.data.error;
 		}
 		else if (data) {
-			rows = data.goods[0].rows.map((goods) => <MyCard id={goods.id} name={goods.name} img={goods.photos} price={goods.price}
-				createdAt={goods.created_at} nickname={goods.user?.nickname}
-				rating={goods.user?.rating} distance={goods.distance} />);
+			if (props.option === "favorites") {
+				rows = data.favorites[0][0].rows.map((fav) => <MyCard id={fav.good.id} name={fav.good.name} img={fav.good.photos} price={fav.good.price}
+					createdAt={fav.good.created_at} nickname={fav.good.user?.nickname}
+					rating={fav.good.user?.rating} distance={fav.good.distance} key={fav.good.id} isByNick={props.option === "profile"} />);
+			}
+			else {
+				rows = data.goods[0].rows.map((goods) => <MyCard id={goods.id} name={goods.name} img={goods.photos} price={goods.price}
+					createdAt={goods.created_at} nickname={goods.user?.nickname}
+					rating={goods.user?.rating} distance={goods.distance} key={goods.id} isByNick={props.option === "profile"} />);
+			}
 		}
 
 		//console.log(this.props.fetchAllGoodsState(this.props.lastArgs));
@@ -284,20 +296,25 @@ function GoodsMin(props) {
 		//console.log(fetchAllGoodsState(store.getState()));
 		//console.log(this.props.activeCategoryName)
 		//console.log(this.props.lastArgs);
+		let count = props.option === "favorites" ? data?.favorites[0][0].count : data?.goods[0].count;
+
 		return (
 			//<div className="col-xs-12 col-sm-12 col-md-8 col-lg-9 mb-3 mt-3">
 			<>
-				<h3 className="text-3xl mb-4">{activeCategoryName ?? "Все категории"}</h3>
-				<main id="goods-min">
+				<main id={props.option !== "profile" ? "goods-min" : "profile-goods-min"}>
 			  		{rows}
 				</main>
-				{data && data.goods[0].count > 0 ? <button onClick={() => lastArgs?.since > 0 && move("left")}>&#60;</button> : null}
-				{data && data.goods[0].count > 0 && lastArgs?.since > 1 ? "..." : null}
-				{data && data.goods[0].count > 0 && lastArgs?.since > 0	? <button onClick={() => move(lastArgs?.since)}>{lastArgs?.since}</button> : null}
-				{data && data.goods[0].count > 0 ? <button className="underline" onClick={() => move(lastArgs?.since + 1)}>{lastArgs?.since + 1}</button> : null}
-				{data && data.goods[0].count > (lastArgs?.since + 1) * 4 ? <button onClick={() => move(lastArgs?.since + 2)}>{lastArgs?.since + 2}</button> : null}
-				{data && data.goods[0].count > (lastArgs?.since + 2) * 4 ? "..." : null}
-				{data && data.goods[0].count > 0 ? <button onClick={() => (lastArgs?.since + 1) * 4 < data.goods[0].count && move("right")}>&#62;</button> : null}
+				{error ? null : (
+					<div className={props.pageSize === 2 ? "pl-7" : null}>
+						{data && count > 0 ? <button onClick={() => lastArgs?.since > 0 && move("left")}>&#60;</button> : null}
+						{data && count > 0 && lastArgs?.since > 1 ? "..." : null}
+						{data && count > 0 && lastArgs?.since > 0	? <button onClick={() => move(lastArgs?.since)}>{lastArgs?.since}</button> : null}
+						{data && count > 0 ? <button className="underline" onClick={() => move(lastArgs?.since + 1)}>{lastArgs?.since + 1}</button> : null}
+						{data && count > (lastArgs?.since + 1) * props.pageSize ? <button onClick={() => move(lastArgs?.since + 2)}>{lastArgs?.since + 2}</button> : null}
+						{data && count > (lastArgs?.since + 2) * props.pageSize ? "..." : null}
+						{data && count > 0 ? <button onClick={() => (lastArgs?.since + 1) * props.pageSize < count && move("right")}>&#62;</button> : null}	
+				</div>
+				)}
 			</>
 			//</div>
 		);
@@ -369,15 +386,17 @@ function MyCard(props) {
 				</div>
 			</div>*/
 			<Card className="h-96 mb-5 bg-neutral-200">
-				<Carousel className="goods-carousel" slide={false} leftControl={<></>} rightControl={<></>}>
-					{props.img.map(img => <img src={"goods_photos/" + img} alt="slide" />)}
+				<Carousel className="goods-carousel" slide={false} indicators={false}>
+					{props.img.map(img => <img src={"/goods_photos/" + img} alt="slide" />)}
 				</Carousel>
 				<a href={"/goods/" + props.id} target="_blank" style={{color: "black"}}><h5>{props.name.length > 45 ? props.name.substring(0, 20) + "..." : props.name}</h5></a>
 				<p>{props.price + "₽"}</p>
-				<p>
-					<a href={props.nickname ? "/users/" + props.nickname : undefined}>{props.nickname ?? "аноним"}</a>
-					<span className='inline-block px-5 float-right text-lg'>{props.rating ?? "-"}<img alt="star" src="service_photos/star.png" width="20" className='inline'/></span>
-				</p>
+				{props.isByNick ? null :
+					<p>
+						<a href={props.nickname ? "/user/" + props.nickname : undefined}>{props.nickname ?? "аноним"}</a>
+						<span className='inline-block px-5 float-right text-lg'>{props.rating ?? "-"}<img alt="star" src="/service_photos/star.png" width="20" className='inline'/></span>
+					</p>
+				}
 				{props.distance && <p><small className="text-muted">{"Расстояние: " + (props.distance / 1000).toFixed(1) + "км"}</small></p>}
 				<p><small className="text-muted">{dateStr}</small></p>
 			</Card>

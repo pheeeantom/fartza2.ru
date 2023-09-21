@@ -24,10 +24,16 @@
     #goods-min {
         @apply lg:grid lg:grid-cols-4 gap-x-16;
     }
+    #profile-goods-min {
+        @apply lg:grid lg:grid-cols-2 gap-x-24 pt-10 pl-10;
+    }
     .goods-carousel {
         min-height: 75% !important;
     }
     #goods-min > div > div {
+        gap: 0px !important;
+    }
+    #profile-goods-min > div > div {
         gap: 0px !important;
     }
     .card-one-goods {

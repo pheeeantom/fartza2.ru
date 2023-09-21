@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import { setupStore } from './store/store';
 import { Provider } from 'react-redux';
-import './styles/output.css';
+//import './styles/output.css';
+import FormBar from './components/logreg';
+import Profile from './components/profile';
 
 export const store = setupStore();
 
@@ -61,6 +63,8 @@ class App extends React.Component {
                             <Routes>
                               <Route path="/" element={<div><NavBar /><Search /><Main /></div>} />
                               <Route path="/goods/:id" element={<div><NavBar without={true} /><Main /></div>} />
+                              <Route path="/logreg" element={<div><FormBar /></div>} />
+                              <Route path="/user/:nick" element={<div><NavBar without={true} /><Profile /></div>} />
                             </Routes>
                         </Suspense>
                     </Router>

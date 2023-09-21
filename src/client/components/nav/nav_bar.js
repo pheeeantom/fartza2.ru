@@ -4,7 +4,7 @@ import Nav from './nav';
 import LogReg from "./logreg";
 import { links } from "./links";
 
-import '../../styles/output.css';
+//import '../../styles/output.css';
 
 function NavBar(props){
   /*constructor(props) {

@@ -51,7 +51,7 @@ function CategoriesBar(props) {
 	function output(num) {
 		dispatch(setCategory(num));
 		dispatch(setCategoryName(data.categories[0][0].find(cat => cat.id === num).type));
-		dispatch(setLastArgs({...lastArgs, category: num}));
+		dispatch(setLastArgs({...lastArgs, category: num, since: 0}));
 		/*let searchParams = new URLSearchParams(location.search);
 		searchParams.set('category', num.toString());
 		window.history.replaceState({}, '', `${location.pathname}?${searchParams}`);*/

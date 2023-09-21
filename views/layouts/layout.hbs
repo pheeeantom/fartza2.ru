@@ -4,6 +4,12 @@
 		<title>Fartza.ru | Здесь можно продать или купить одежду</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		{{#if bootstrap}}
+			<link rel="stylesheet" href="/bootstrap.min.css" />
+			<link rel="stylesheet" href="/logreg.css" />
+		{{else}}
+			<link rel="stylesheet" href="/output.css" />
+		{{/if}}
 	</head>
 	<body>
 
