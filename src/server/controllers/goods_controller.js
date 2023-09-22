@@ -2,8 +2,49 @@ const { Op } = require('sequelize');
 const { Goods } = require('../db/sequelize');
 const { Users } = require('../db/sequelize');
 const sequelize = require('sequelize');
+const multer = require('multer');
+const path = require('path');
+const DB = require('../lib/db2');
+const { request } = require('http');
+//var forms = multer();
+//app.use(forms.array()); 
+
 
 const pageSize = 4;
+
+function genSalt() {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < 20; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, '../../../public/goods_photos/'))
+    },
+    filename: function (req, file, cb) {
+        cb(null, genSalt() + '-' + Date.now() + file.originalname.match(/\..*$/)[0])
+    }
+});
+
+const multi_upload = multer({
+    storage,
+    limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            const err = new Error('Only .png, .jpg and .jpeg format allowed!')
+            err.name = 'ExtensionError'
+            return cb(err);
+        }
+    },
+}).array('images', 3)
 
 exports.getPage = (request, response, next) => {
     var lat = parseFloat(request.query.lat);
@@ -230,7 +271,7 @@ exports.getByNick = (request, response, next) => {
         order: [['id', 'DESC']],
         limit: pageSize / 2,
         offset: Number(request.query.since * (pageSize / 2)),
-        where: sequelize.literal(`userId = (select id from users where nickname='${request.params["nick"]}')`),
+        where: sequelize.literal(`status='active' and userId = (select id from users where nickname='${request.params["nick"]}')`),
         attributes: attr
     }).then(result => {
         if (result.count == 0) {
@@ -240,5 +281,106 @@ exports.getByNick = (request, response, next) => {
         response.json( { 'goods': [result] } );
     }).catch(err => {
         response.status(500).send({error: err});
+    });
+};
+
+exports.create = (request, response, next) => {
+    if (request.user) {
+        /*if (request.body.images.length === 0) {
+            response.status(422).send();
+            return;
+        }
+        for (let i = 0; i < request.body.images.length; i++) {
+            if (request.files.images[i].name.split('.').pop() !== 'png' &&
+                request.files.images[i].name.split('.').pop() !== 'jpg' &&
+                request.files.images[i].name.split('.').pop() !== 'jpeg') {
+                response.status(422).send();
+                return;
+            }
+        }*/
+        multi_upload(request, response, function (err) {
+            if (err instanceof multer.MulterError) {
+                // A Multer error occurred when uploading.
+                response.status(500).send({ error: { message: `Multer uploading error: ${err.message}` } }).end();
+                return;
+            } else if (err) {
+                // An unknown error occurred when uploading.
+                if (err.name == 'ExtensionError') {
+                    response.status(413).send({ error: { message: err.message } }).end();
+                } else {
+                    response.status(500).send({ error: { message: `unknown uploading error: ${err.message}` } }).end();
+                }
+                return;
+            }
+    
+            // Everything went fine.
+            // show file `req.files`
+            // show body `req.body`
+            //res.status(200).end('Your files uploaded.');
+            Goods.create({
+                name: request.body.name,
+                description: request.body.description,
+                price: request.body.price,
+                latitude: request.body.latitude,
+                longitude: request.body.longitude,
+                userId: request.user.id,
+                photos: request.files.map(image => image.filename)
+            }).then(result => {
+                /*for (let i = 0; i < request.body.images.length; i++) {
+                    request.files.images[i].mv('public/avatars/' + request.user.nickname + '/' + result.id + '/' + i + '.' + request.files.images[i].name.split('.').pop());
+                }*/
+                /*Goods.update({
+                    
+                }, {
+                    where: {
+                        id: result.id
+                    }
+                });*/
+                let conn = DB.createConn();
+                conn.query("INSERT INTO categories(type_id, goods_id) VALUES (" + request.body.cat + ", " + result.id + ");",
+                    (err, results, fields) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                response.status(200).redirect("/goods/" + result.id);
+            }).catch(err => {
+                response.status(500).send({error: err.message});
+            });
+        });
+    }
+    else {
+        response.status(401).send({error: "Not authorized"});
+    }
+};
+
+exports.mark = (request, response, next) => {
+    multi_upload(request, response, function (err) {
+        console.log(request.body);
+        Goods.findByPk(request.params["id"]).then(result => {
+            if (result.count === 0) {
+                response.status(404).send({error: 'Товара с таким id не существует!'});
+                return;
+            }
+            if (request.user.id === result.userId) {
+                let conn = DB.createConn();
+                console.log(request.body);
+                console.log("UPDATE goods SET status='" + request.body.status + "' WHERE id=" + request.params["id"] + ";");
+                conn.query("UPDATE goods SET status='" + request.body.status + "' WHERE id=" + request.params["id"] + ";",
+                    (err, results, fields) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+            }
+            else {
+                response.status(401).send({error: "Not authorized!"});
+                return;
+            }
+            console.log(request.body);
+            response.status(200).redirect("/user/" + request.user.nickname);//.send("ok");
+        }).catch(err => {
+            response.status(500).send({error: err});
+        });
     });
 };

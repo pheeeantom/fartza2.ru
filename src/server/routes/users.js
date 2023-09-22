@@ -21,4 +21,7 @@ router.route("/is_favorite/:id")
 
 router.route('/users/:id')
     .post(usersController.edit);
+
+router.route('/current_user')
+    .get(usersController.currentUser);
 module.exports = router;

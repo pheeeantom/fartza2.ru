@@ -386,6 +386,12 @@ function MyCard(props) {
 				</div>
 			</div>*/
 			<Card className="h-96 mb-5 bg-neutral-200">
+				{props.isByNick ? <>
+					<form action={"/api/goods/" + props.id} method="post" enctype="multipart/form-data">
+						<input type="hidden" name="status" value="deleted" />
+						<button type="submit" className="btn">Удалить</button> 
+					</form>
+				</> : null}
 				<Carousel className="goods-carousel" slide={false} indicators={false}>
 					{props.img.map(img => <img src={"/goods_photos/" + img} alt="slide" />)}
 				</Carousel>

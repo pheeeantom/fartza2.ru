@@ -69,6 +69,12 @@ export const usersAPI = createApi({
             }),
             providesTags: result => ['DeleteFav', 'PostFav']
         }),
+        currentUser: build.query({
+            query: () => ({
+                url: '/current_user',
+                method: 'GET'
+            })
+        }),
         /*editUser: build.mutation({
             query: ({id, args}) => ({
                 url: `/users/${id}`,
@@ -87,4 +93,5 @@ export const usersAPI = createApi({
 });
 
 export const { useFetchUserByNickQuery, useSubscribeMutation, useGetSubscriptionsQuery, useUnsubscribeMutation,
-    useAddToFavoritesMutation, useGetFavoritesQuery, useRemoveFromFavoritesMutation, useIsFavoriteQuery } = usersAPI;
+    useAddToFavoritesMutation, useGetFavoritesQuery, useRemoveFromFavoritesMutation, useIsFavoriteQuery,
+    useCurrentUserQuery } = usersAPI;

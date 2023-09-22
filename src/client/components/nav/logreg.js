@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+import { useCurrentUserQuery } from "../../store/services/users_service";
+import { Dropdown } from "flowbite-react";
 
 function LogReg(props) {
 
-    const [logout, setLogout] = useState(false);
-    const [confirm, setConfirm] = useState(null);
-    const [nick, setNick] = useState(null);
+    const { data, isLoading, error } = useCurrentUserQuery();
 
     //this.state = {logout: false, confirm: null, nick: null};
 
@@ -27,8 +27,27 @@ function LogReg(props) {
       return (
         <>
           <br className="lg:hidden"/>
-          <li className="inline-block align-middle mt-1 md:mt-3 lg:mt-0 py-1 px-2 lg:ml-20 w-auto bg-white hover:bg-neutral-200"><button className="text-black text-lg">Вход/Регистрация</button></li>
-        </>
+          {isLoading ?
+              "Подождите, идет загрузка..." :
+            error ?
+            error.data.error === "Not authorized" ?
+              <li className="inline-block align-middle mt-1 md:mt-3 lg:mt-0 py-1 px-2 lg:ml-20 w-auto bg-white hover:bg-neutral-200"><button className="text-black text-lg" onClick={() => window.open("/logreg", "_self")}>Вход/Регистрация</button></li> :
+              error.data.error :
+            data ?
+              <li className="inline-block align-middle mt-1 md:mt-3 lg:mt-0 py-1 px-2 lg:ml-20 w-auto">
+                <Dropdown label={data.user.nickname + " (осуществлен вход)"} class="bg-white hover:bg-neutral-200">
+                  <Dropdown.Item as="a" href="/create" target="_blank">
+                    Продать
+                  </Dropdown.Item>
+                  <Dropdown.Item as="a" href={"/user/" + data.user.nickname} target="_blank">
+                    Настройки
+                  </Dropdown.Item>
+                  <Dropdown.Item as="a" href="/logout" target="_blank">
+                    Выйти
+                  </Dropdown.Item>
+                </Dropdown>
+              </li> : null}
+          </>
       );
     //}
     /*else {

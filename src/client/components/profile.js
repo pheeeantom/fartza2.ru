@@ -16,6 +16,27 @@ function Profile(props) {
     const [unsubscribe, result2] = useUnsubscribeMutation()
 
     const [inputs, setInputs] = useState();
+    const [valid, setValid] = useState(false);
+
+    function validate(e) {
+        var maxfilesize = 1024 * 1024,  // 1 Mb
+            filesize    = e.target.files[0].size,
+            fileName    = e.target.files[0].name,
+            warningel   = document.getElementById( 'lbError' );
+        
+        if ( fileName.split('.').pop() !== 'png' && fileName.split('.').pop() !== 'jpg' && fileName.split('.').pop() !== 'jpeg' ) {
+            warningel.innerHTML = "Файл должен быть .png, .jpg либо .jpeg";
+            setValid(true);
+        }
+        else if ( filesize > maxfilesize ) {
+          warningel.innerHTML = "Файл слишком большой: " + filesize + ". Максимальный размер: " + maxfilesize;
+          setValid(true);
+        }
+        else {
+          warningel.innerHTML = '';
+          setValid(false);
+        }   
+      }
 
     useEffect(() => {
         if (data)
@@ -88,8 +109,9 @@ function Profile(props) {
                                     <label for="surname" className="inline-block w-1/3">Фамилия:</label><input value={inputs?.surname} onInput={input} name="surname" id="surname" className="w-2/3 border border-neutral-400"/>
                                 </div>
                                 <div className="my-2">
-                                    <label className="inline-block mr-2">Аватарка:</label><input type="file" name="photo"/>
+                                    <label className="inline-block mr-2">Аватарка:</label><input onChange={validate} type="file" name="photo" accept=".png,.jpg,.jpeg"/>
                                 </div>
+                                <div id='lbError' className='text-red-600'></div>
                                 <div className="my-2">
                                     <label for="about" className="inline-block w-1/3">Био:</label><textarea value={inputs?.about} onInput={input} name="about" id="about" className="w-2/3 border border-neutral-400"/>
                                 </div>
@@ -103,7 +125,7 @@ function Profile(props) {
                                     <label className="inline-block w-1/3">Пароль:</label><input name="pass" className="w-2/3 border border-neutral-400" pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}$"/>
                                 </div>
                                 <div className="text-center my-2">
-                                    <input type="submit" className="px-4 py-1.5 border border-neutral-400 bg-neutral-50 hover:text-white hover:bg-neutral-600"/>
+                                    <input disabled={valid} type="submit" className="px-4 py-1.5 border border-neutral-400 bg-neutral-50 hover:text-white hover:bg-neutral-600"/>
                                 </div>
                             </div>
                         </form>

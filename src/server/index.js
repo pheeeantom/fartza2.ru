@@ -1,12 +1,13 @@
 const express = require("express");
 const expressHbs = require("express-handlebars");
-var fileUpload = require('express-fileupload');
+//var fileUpload = require('express-fileupload');
 const app = express();
 const goodsRouter = require('./routes/goods');
 const categoriesRouter = require('./routes/categories');
 const usersRouter = require('./routes/users');
 const pool = require('./lib/db');
 const usersController = require('./controllers/users_controller');
+const goodsController = require('./controllers/goods_controller');
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local');
@@ -23,11 +24,13 @@ var mysql2 = require('mysql2/promise');
 var MySQLStore = require('express-mysql-session')(session);
 
 const hour = 3600000;
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(config.secret));
 
-app.use(fileUpload({}));
+/*app.use(fileUpload({
+	limits: { fileSize: 1024 * 1024 },
+}));*/
 
 var sessionStore = new MySQLStore({
 	//expiration: 604800,
@@ -129,7 +132,20 @@ app.get("/logreg", function(request, response) {
     	});
 	}
 	else {
-		response.send(request.user);
+		response.redirect('/user/' + request.user.nickname);
+	}
+});
+
+app.get("/create", function(request, response) {
+	if (!request.user) {
+		response.status(401).send();
+	}
+	else {
+		response.render("index", {
+        	categories: false,
+        	page: "index",
+			bootstrap: true
+    	});
 	}
 });
 
