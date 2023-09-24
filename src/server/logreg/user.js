@@ -20,8 +20,8 @@ exports.User = class User {
     }
     async createUser(conn, req, res) {
         let salt = this.genSalt();
-        conn.query("INSERT INTO users(nickname, email, password_hash, salt) VALUES ('" + this.nick + "', '"
-            + this.email + "', '" + this.genHash(salt) + "', '" + salt + "');",
+        conn.query("INSERT INTO users(nickname, email, password_hash, salt) VALUES (?, ?, ?, ?);",
+            [this.nick, this.email, this.genHash(salt), salt],
             (err, results, fields) => {
                 if (err) {
                     console.log(err);
@@ -72,7 +72,7 @@ exports.User = class User {
                         }
                         else {
                             let conn2 = DB.createConn();
-                            conn2.query("SELECT * from users WHERE id='" + results.insertId + "';",
+                            conn2.query("SELECT * from users WHERE id=?;", [results.insertId],
                                 function(err, results, fields) {
                                     if (err) { console.log(err); DB.plainEndConn(conn2); res.sendStatus(500); }
                                     else {

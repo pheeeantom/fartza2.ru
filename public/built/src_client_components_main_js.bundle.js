@@ -289,7 +289,7 @@ function ProductWrapper(props) {
 }
 
 function Product(props) {
-  var _props$nickname, _props$rating;
+  var _props$nickname;
   var _useIsFavoriteQuery = (0,_store_services_users_service__WEBPACK_IMPORTED_MODULE_4__.useIsFavoriteQuery)(props.id),
     favs = _useIsFavoriteQuery.data,
     loadingFavs = _useIsFavoriteQuery.isLoading,
@@ -341,18 +341,43 @@ function Product(props) {
     });
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "card-one-goods pt-5"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "flex items-start"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h5", {
-    className: "text-3xl"
-  }, props.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, props.desc), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, props.price + "₽"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+    className: "text-3xl w-4/5 inline-block mr-3"
+  }, props.name), props.login ? loadingFavs ? 'Подождите, идет загрузка...' : errorFavs ? errorFavs.data.error : favs.isFavorite && !errorFavs ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    onClick: function onClick() {
+      return removeFromFavorites(props.id);
+    },
+    className: "mt-8"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    "class": "w-6 h-6 text-gray-800 dark:text-white",
+    "aria-hidden": "true",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "currentColor",
+    viewBox: "0 0 14 20"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M13 20a1 1 0 0 1-.64-.231L7 15.3l-5.36 4.469A1 1 0 0 1 0 19V2a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v17a1 1 0 0 1-1 1Z"
+  }))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    onClick: function onClick() {
+      return addToFavorites(props.id);
+    },
+    className: "mt-8"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    "class": "w-6 h-6 text-gray-800 dark:text-white",
+    "aria-hidden": "true",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none",
+    viewBox: "0 0 14 20"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    stroke: "currentColor",
+    "stroke-linecap": "round",
+    "stroke-linejoin": "round",
+    "stroke-width": "2",
+    d: "m13 19-6-5-6 5V2a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17Z"
+  }))) : null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, props.desc), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, props.price + "₽"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
     href: props.nickname ? "/user/" + props.nickname : undefined
-  }, (_props$nickname = props.nickname) !== null && _props$nickname !== void 0 ? _props$nickname : "аноним"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
-    className: "inline-block px-5 float-right text-lg"
-  }, (_props$rating = props.rating) !== null && _props$rating !== void 0 ? _props$rating : "-", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
-    alt: "star",
-    src: "/service_photos/star.png",
-    width: "20",
-    className: "inline"
-  }))), props.distance && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("small", {
+  }, (_props$nickname = props.nickname) !== null && _props$nickname !== void 0 ? _props$nickname : "аноним")), props.distance && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("small", {
     className: "text-muted"
   }, "Расстояние: " + (props.distance / 1000).toFixed(1) + "км")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("small", {
     className: "text-muted"
@@ -365,17 +390,7 @@ function Product(props) {
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_pbe_react_yandex_maps__WEBPACK_IMPORTED_MODULE_5__.Placemark, {
     geometry: [props.lat, props.lon]
-  }))) : null, props.login ? loadingFavs ? 'Подождите, идет загрузка...' : errorFavs ? errorFavs.data.error : favs.isFavorite && !errorFavs ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-    onClick: function onClick() {
-      return removeFromFavorites(props.id);
-    },
-    className: "mt-8 px-4 py-1.5 border border-neutral-400 bg-neutral-50 hover:text-white hover:bg-neutral-600"
-  }, "\u0423\u0431\u0440\u0430\u0442\u044C \u0438\u0437 \u0438\u0437\u0431\u0440\u0430\u043D\u043D\u043E\u0433\u043E") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-    onClick: function onClick() {
-      return addToFavorites(props.id);
-    },
-    className: "mt-8 px-4 py-1.5 border border-neutral-400 bg-neutral-50 hover:text-white hover:bg-neutral-600"
-  }, "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0432 \u0438\u0437\u0431\u0440\u0430\u043D\u043D\u043E\u0435") : null))));
+  }))) : null))));
 
   /*<div id={"carouselGoodsIndicators" + this.props.id} data-bs-interval="false" className="carousel slide col-xs-12 col-sm-12 col-md-6 col-lg-6" data-bs-ride="carousel" style={{float: 'left'}}>
   	<div className="carousel-indicators">

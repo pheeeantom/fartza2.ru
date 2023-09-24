@@ -92,11 +92,9 @@ exports.getPage = (request, response, next) => {
     if (request.query.sort) {
         Goods.findAndCountAll({
             where,
-            order: lat && lng ? [sequelize.fn('isnull', sequelize.col('distance')),
-                [!request.query.sort || request.query.sort == 'new' || request.query.sort == 'subscriptions' ? 'id'
-                    : request.query.sort == 'distance' ? 'distance'
-                    : 'views', request.query.sort == 'distance' ? 'ASC' : 'DESC']]
-                : [[!request.query.sort || request.query.sort == 'new' ? 'id'
+            order: lat && lng && request.query.sort == 'distance' ? [sequelize.fn('isnull', sequelize.col('distance')),
+                ['distance', 'ASC']]
+                : [[!request.query.sort || request.query.sort == 'new' || request.query.sort == 'subscriptions' ? 'id'
                     : 'views', 'DESC']],
             limit: pageSize,
             offset: Number(request.query.since * pageSize),
@@ -191,9 +189,18 @@ exports.getPageCats = (request, response, next) => {
     if (request.query.sort) {
         Goods.findAndCountAll({
             where,
-            order: lat && lng ? [sequelize.fn('isnull', sequelize.col('distance')),
+            /*order: lat && lng ? [sequelize.fn('isnull', sequelize.col('distance')),
                 [!request.query.sort || request.query.sort == 'new' ? 'id' : request.query.sort == 'distance' ? 'distance'
                     : 'views', request.query.sort == 'distance' ? 'ASC' : 'DESC']]
+                : [[!request.query.sort || request.query.sort == 'new' ? 'id'
+                    : 'views', 'DESC']],*/
+            /*order: lat && lng ? [
+                [!request.query.sort || request.query.sort == 'new' ? 'id' : request.query.sort == 'distance' ? sequelize.fn('isnull', sequelize.col('distance'))
+                    : 'views', request.query.sort == 'distance' ? 'ASC' : 'DESC']]
+                : [[!request.query.sort || request.query.sort == 'new' ? 'id'
+                    : 'views', 'DESC']],*/
+            order: lat && lng && request.query.sort == 'distance' ? [sequelize.fn('isnull', sequelize.col('distance')),
+                ['distance', 'ASC']]
                 : [[!request.query.sort || request.query.sort == 'new' ? 'id'
                     : 'views', 'DESC']],
             limit: pageSize,
@@ -259,29 +266,34 @@ exports.getSingle = (request, response, next) => {
 };
 
 exports.getByNick = (request, response, next) => {
-    var lat = parseFloat(request.query.lat);
-    var lng = parseFloat(request.query.lon);
-    var attr = ['id', 'name', 'price', 'description', 'photos', 'created_at', 'views', 'status', 'latitude', 'longitude', 'userId'];
-    var location = sequelize.literal(`ST_GeomFromText('POINT(${lng} ${lat})')`);
-    var distance = sequelize.fn('ST_Distance_Sphere', sequelize.fn('Point', sequelize.col('longitude'), 
-        sequelize.col('latitude')), location);
-    if (lat && lng)
-        attr.push([distance,'distance']);
-    Goods.findAndCountAll({
-        order: [['id', 'DESC']],
-        limit: pageSize / 2,
-        offset: Number(request.query.since * (pageSize / 2)),
-        where: sequelize.literal(`status='active' and userId = (select id from users where nickname='${request.params["nick"]}')`),
-        attributes: attr
-    }).then(result => {
-        if (result.count == 0) {
-            response.status(404).send({error: 'Данный пользователь не публиковал товаров'});
-            return;
-        }
-        response.json( { 'goods': [result] } );
-    }).catch(err => {
-        response.status(500).send({error: err});
-    });
+    if (request.user.nickname === request.params["nick"]) {
+        var lat = parseFloat(request.query.lat);
+        var lng = parseFloat(request.query.lon);
+        var attr = ['id', 'name', 'price', 'description', 'photos', 'created_at', 'views', 'status', 'latitude', 'longitude', 'userId'];
+        var location = sequelize.literal(`ST_GeomFromText('POINT(${lng} ${lat})')`);
+        var distance = sequelize.fn('ST_Distance_Sphere', sequelize.fn('Point', sequelize.col('longitude'), 
+            sequelize.col('latitude')), location);
+        if (lat && lng)
+            attr.push([distance,'distance']);
+        Goods.findAndCountAll({
+            order: [['id', 'DESC']],
+            limit: pageSize / 2,
+            offset: Number(request.query.since * (pageSize / 2)),
+            where: sequelize.literal(`status='active' and userId = (select id from users where nickname='${request.params["nick"]}')`),
+            attributes: attr
+        }).then(result => {
+            if (result.count == 0) {
+                response.status(404).send({error: 'Данный пользователь не публиковал товаров'});
+                return;
+            }
+            response.json( { 'goods': [result] } );
+        }).catch(err => {
+            response.status(500).send({error: err});
+        });
+    }
+    else {
+        response.status(401).send({error: "Not authorized"});
+    }
 };
 
 exports.create = (request, response, next) => {
@@ -337,7 +349,8 @@ exports.create = (request, response, next) => {
                     }
                 });*/
                 let conn = DB.createConn();
-                conn.query("INSERT INTO categories(type_id, goods_id) VALUES (" + request.body.cat + ", " + result.id + ");",
+                conn.query("INSERT INTO categories(type_id, goods_id) VALUES (?, ?);",
+                    [request.body.cat, result.id],
                     (err, results, fields) => {
                         if (err) {
                             console.log(err);
@@ -364,9 +377,10 @@ exports.mark = (request, response, next) => {
             }
             if (request.user.id === result.userId) {
                 let conn = DB.createConn();
-                console.log(request.body);
-                console.log("UPDATE goods SET status='" + request.body.status + "' WHERE id=" + request.params["id"] + ";");
-                conn.query("UPDATE goods SET status='" + request.body.status + "' WHERE id=" + request.params["id"] + ";",
+                //console.log(request.body);
+                //console.log("UPDATE goods SET status='" + request.body.status + "' WHERE id=" + request.params["id"] + ";");
+                conn.query("UPDATE goods SET status=? WHERE id=?;",
+                    [request.body.status, request.params["id"]],
                     (err, results, fields) => {
                         if (err) {
                             console.log(err);

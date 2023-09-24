@@ -5,7 +5,7 @@ const initialState = {
     isLoading: false,
     error: null*/
     lastArgs: {
-        sort: 'popular',
+        sort: 'new',
         word: '',
         since: 0
     }

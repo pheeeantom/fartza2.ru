@@ -77,7 +77,7 @@ function Profile(props) {
                             <p className="text-3xl">{data.user[0][0].name && data.user[0][0].surname ? data.user[0][0].name + " " + data.user[0][0].surname : data.user[0][0].name ? data.user[0][0].name : "Аноним"}</p>
                             <p className="text-xl mt-8">{data.user[0][0].about}</p>
                             <p className="text-3xl mt-8">{data.user[0][0].city}</p>
-                            <div className="mt-8">
+                            {/* <div className="mt-8">
                                 <Rating size={"md"}>
                                     <Rating.Star filled={data.user[0][0].rating > 0.5} />
                                     <Rating.Star filled={data.user[0][0].rating > 1.5} />
@@ -88,7 +88,7 @@ function Profile(props) {
                                         {data.user[0][0].rating} из 5
                                     </p>
                                 </Rating>
-                            </div>
+                            </div> */}
                             {data.login === false ? loadingSubs ?
                                 'Подождите, идет загрузка...' :
                             errorSubs ?

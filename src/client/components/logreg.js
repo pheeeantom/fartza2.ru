@@ -238,7 +238,6 @@ class Email extends React.Component {
 		super(props);
 		this.state = {isPassed: true};
 		this.handleInput = this.handleInput.bind(this);
-		this.handleFocus = this.handleFocus.bind(this);
 		this.showTip = this.showTip.bind(this);
 	}
 	showTip() {
@@ -253,27 +252,31 @@ class Email extends React.Component {
 			this.setState({isPassed: false}, () => this.props.manipulteSubmit());
 		}
 	}
-	handleFocus(event) {
-		event.target.removeAttribute('readonly');
-	}
 	render() {
 		let classLink = "form-text text-danger";
 		return (
 			<div className="form-group">
                 <label htmlFor={this.props.emailId}>Email</label>
-                <input onInput={this.handleInput} type="text" id={this.props.emailId} className="form-control" placeholder="Введите email" aria-describedby="emailError-log" name="email" onFocus={this.handleFocus} readOnly autoComplete="off"/>
+                <input onInput={this.handleInput} type="text" id={this.props.emailId} className="form-control" placeholder="Введите email" aria-describedby="emailError-log" name="email" />
                 <small className={this.state.isPassed ? classLink + " d-none" : classLink}>Email должен быть в таком формате: ivanov@domain.domain</small>
             </div>
 		);
 	}
 }
 
+/*
+this.handleFocus = this.handleFocus.bind(this);
+handleFocus(event) {
+	event.target.removeAttribute('readonly');
+}
+onFocus={this.handleFocus} readOnly autoComplete="off"
+*/
+
 class Nickname extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {isPassed: true};
 		this.handleInput = this.handleInput.bind(this);
-		this.handleFocus = this.handleFocus.bind(this);
 		this.showTip = this.showTip.bind(this);
 	}
 	showTip() {
@@ -290,15 +293,12 @@ class Nickname extends React.Component {
 			this.setState({isPassed: false}, () => this.props.manipulteSubmit());
 		}
 	}
-	handleFocus(event) {
-		event.target.removeAttribute('readonly');
-	}
 	render() {
 		let classLink = "form-text text-danger";
 		return (
 			<div className="form-group">
 				<label htmlFor="nickname">Ник</label>
-				<input onInput={this.handleInput} type="text" id="nickname" className="form-control" placeholder="Введите ник" aria-describedby="nicknameError-reg" name="nickname" onFocus={this.handleFocus} readOnly autoComplete="off"/>
+				<input onInput={this.handleInput} type="text" id="nickname" className="form-control" placeholder="Введите ник" aria-describedby="nicknameError-reg" name="nickname" />
 				<small className={this.state.isPassed ? classLink + " d-none" : classLink}>Ник должен состоять минимум из двух символов</small>
 			</div>
 		);
@@ -310,7 +310,6 @@ class Password extends React.Component {
 		super(props);
 		this.state = {isPassed: true, passVisible: false};
 		this.handleInput = this.handleInput.bind(this);
-		this.handleFocus = this.handleFocus.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 		this.showTip = this.showTip.bind(this);
 	}
@@ -327,9 +326,6 @@ class Password extends React.Component {
 		else {
 			this.setState({isPassed: false}, () => this.props.manipulteSubmit());
 		}
-	}
-	handleFocus(event) {
-		event.target.removeAttribute('readonly');
 	}
 	handleClick(event) {
 		if (event.target.className.includes("open")) {
@@ -354,7 +350,7 @@ class Password extends React.Component {
 			<div className={this.props.passId.includes("log") ? "form-group pb-4" : "form-group"}>
 				<label htmlFor={this.props.passId}>Пароль</label>
 				<div style={{display: "flex"}}>
-				    <input id={this.props.passId} onInput={this.handleInput} type="password" className="form-control password" placeholder="Пароль" aria-describedby="passwordError-log" name="password" onFocus={this.handleFocus} readOnly autoComplete="off"/><img onClick={this.handleClick} className={"open " + visible[0]} src="/service_photos/eye.svg"/><img onClick={this.handleClick} src="/service_photos/eye-close.svg" className={"close " + visible[1]}/>
+				    <input id={this.props.passId} onInput={this.handleInput} type="password" className="form-control password" placeholder="Пароль" aria-describedby="passwordError-log" name="password" /><img onClick={this.handleClick} className={"open " + visible[0]} src="/service_photos/eye.svg"/><img onClick={this.handleClick} src="/service_photos/eye-close.svg" className={"close " + visible[1]}/>
 				</div>
 				<small className={this.state.isPassed ? classLink + " d-none" : classLink}>Пароль должен состоять из минимум 8 символов, должен содержать латинские большие и маленькие буквы, цифры и специальные символы: !, @, #, $, %, ^, &, *</small>
 			</div>
@@ -398,7 +394,7 @@ class Password2 extends Password {
 			<div className="form-group pb-4">
 				<label htmlFor={this.props.passId}>Подтвердить пароль</label>
 				<div style={{display: "flex"}}>
-				    <input id={this.props.passId} onInput={this.handleInput} type="password" className="form-control password" placeholder="Пароль" aria-describedby="passwordError-log" name="password" onFocus={this.handleFocus} readOnly autoComplete="off"/><img onClick={this.handleClick} className={"open " + visible[0]} src="/service_photos/eye.svg"/><img onClick={this.handleClick} src="/service_photos/eye-close.svg" className={"close " + visible[1]}/>
+				    <input id={this.props.passId} onInput={this.handleInput} type="password" className="form-control password" placeholder="Пароль" aria-describedby="passwordError-log" name="password" /><img onClick={this.handleClick} className={"open " + visible[0]} src="/service_photos/eye.svg"/><img onClick={this.handleClick} src="/service_photos/eye-close.svg" className={"close " + visible[1]}/>
 				</div>
 				<small className={this.state.isPassed ? classLink + " d-none" : classLink}>Пароли должны совпадать!</small>
 			</div>

@@ -17,7 +17,7 @@ function NavBar(props){
     this.state = {isActive: active};
   }*/
 
-  const [isActive, setIsActive] = useState([true].concat(Array(links.length - 1).fill(false)))
+  const [isActive, setIsActive] = useState(/*[true].concat(Array(links.length - 1).fill(false))*/[true,false,false])
 
   /*componentDidMount() {
     const searchParams = new URLSearchParams(location.search);

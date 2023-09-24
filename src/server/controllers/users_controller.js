@@ -49,72 +49,108 @@ exports.getSingle = (request, response, login, next) => {
 };
 
 exports.subscribe = (request, response, next) => {
-    Subscriptions.create({ from_id: request.user.id, userId: request.params["id"] }).then(result => {
-        response.status(200).send("ok");
-    }).catch(err => {
-        response.status(500).send({error: err.message});
-    });
+    if (request.user) {
+        Subscriptions.create({ from_id: request.user.id, userId: request.params["id"] }).then(result => {
+            response.status(200).send("ok");
+        }).catch(err => {
+            response.status(500).send({error: err.message});
+        });
+    }
+    else {
+        response.status(401).send({error: "Not authorized"});
+    }
 };
+    
 
 exports.unsubscribe = (request, response, next) => {
-    Subscriptions.destroy({where: {[Op.and]: [{ from_id: request.user.id, userId: request.params["id"] }]}}).then(result => {
-        response.status(200).send("ok");
-    }).catch(err => {
-        response.status(500).send({error: err.message});
-    });
+    if (request.user) {
+        Subscriptions.destroy({where: {[Op.and]: [{ from_id: request.user.id, userId: request.params["id"] }]}}).then(result => {
+            response.status(200).send("ok");
+        }).catch(err => {
+            response.status(500).send({error: err.message});
+        });
+    }
+    else {
+        response.status(401).send({error: "Not authorized"});
+    }
 };
 
 exports.subscriptions = (request, response, next) => {
-    Subscriptions.findAll({where: { from_id: request.user.id }, include: [Users]}).then(result => {
-        /*if (result.length == 0) {
-            response.status(404).send({error: 'Подписок у вошедшего пользователя нет!'});
-            return;
-        }*/
-        response.json( { 'subscriptions': [[result]] } );
-    }).catch(err => {
-        response.status(500).send({error: err});
-    });
+    if (request.user) {
+        Subscriptions.findAll({where: { from_id: request.user.id }, include: [Users]}).then(result => {
+            /*if (result.length == 0) {
+                response.status(404).send({error: 'Подписок у вошедшего пользователя нет!'});
+                return;
+            }*/
+            response.json( { 'subscriptions': [[result]] } );
+        }).catch(err => {
+            response.status(500).send({error: err});
+        });
+    }
+    else {
+        response.status(401).send({error: "Not authorized"});
+    }
 };
 
 exports.addToFavorites = (request, response, next) => {
-    Favorites.create({ userId: request.user.id, goodId: request.params["id"] }).then(result => {
-        response.status(200).send("ok");
-    }).catch(err => {
-        response.status(500).send({error: err.message});
-    });
+    if (request.user) {
+        Favorites.create({ userId: request.user.id, goodId: request.params["id"] }).then(result => {
+            response.status(200).send("ok");
+        }).catch(err => {
+            response.status(500).send({error: err.message});
+        });
+    }
+    else {
+        response.status(401).send({error: "Not authorized"});
+    }
 };
 
 exports.removeFromFavorites = (request, response, next) => {
-    Favorites.destroy({where: {[Op.and]: [{ userId: request.user.id, goodId: request.params["id"] }]}}).then(result => {
-        response.status(200).send("ok");
-    }).catch(err => {
-        response.status(500).send({error: err.message});
-    });
+    if (request.user) {
+        Favorites.destroy({where: {[Op.and]: [{ userId: request.user.id, goodId: request.params["id"] }]}}).then(result => {
+            response.status(200).send("ok");
+        }).catch(err => {
+            response.status(500).send({error: err.message});
+        });
+    }
+    else {
+        response.status(401).send({error: "Not authorized"});
+    }
 };
 
 exports.favorites = (request, response, next) => {
-    Favorites.findAndCountAll({where: { userId: request.user.id }, limit: pageSize,
-        offset: Number(request.query.since * pageSize), include: [Users, Goods]}).then(result => {
-        /*if (result.length == 0) {
-            response.status(404).send({error: 'Подписок у вошедшего пользователя нет!'});
-            return;
-        }*/
-        response.json( { 'favorites': [[result]] } );
-    }).catch(err => {
-        response.status(500).send({error: err});
-    });
+    if (request.user) {
+        Favorites.findAndCountAll({where: { userId: request.user.id }, limit: pageSize,
+            offset: Number(request.query.since * pageSize), include: [Users, Goods]}).then(result => {
+            /*if (result.length == 0) {
+                response.status(404).send({error: 'Подписок у вошедшего пользователя нет!'});
+                return;
+            }*/
+            response.json( { 'favorites': [[result]] } );
+        }).catch(err => {
+            response.status(500).send({error: err});
+        });
+    }
+    else {
+        response.status(401).send({error: "Not authorized"});
+    }
 };
 
 exports.isFavorite = (request, response, next) => {
-    Favorites.findAll({where: {[Op.and]: [{ userId: request.user.id, goodId: request.params["id"] }]}}).then(result => {
-        if (result.length == 0) {
-            response.json( { 'isFavorite': false } );
-            return;
-        }
-        response.json( { 'isFavorite': true } );
-    }).catch(err => {
-        response.status(500).send({error: err});
-    });
+    if (request.user) {
+        Favorites.findAll({where: {[Op.and]: [{ userId: request.user.id, goodId: request.params["id"] }]}}).then(result => {
+            if (result.length == 0) {
+                response.json( { 'isFavorite': false } );
+                return;
+            }
+            response.json( { 'isFavorite': true } );
+        }).catch(err => {
+            response.status(500).send({error: err});
+        });
+    }
+    else {
+        response.status(401).send({error: "Not authorized"});
+    }
 };
 
 exports.edit = (request, response, next) => {
@@ -133,7 +169,8 @@ exports.edit = (request, response, next) => {
                 salt = result;
                 password_hash = require('crypto').createHash('sha256').update(request.body.pass + salt).digest("hex");
                 let conn = DB.createConn();
-                conn.query("UPDATE users SET password_hash='" + password_hash + "', salt='" + salt + "' WHERE id='" + request.params["id"] + "';",
+                conn.query("UPDATE users SET password_hash=?, salt=? WHERE id=?;",
+                    [password_hash, salt, request.params["id"]],
                     (err, results, fields) => {
                         if (err) {
                             console.log(err);

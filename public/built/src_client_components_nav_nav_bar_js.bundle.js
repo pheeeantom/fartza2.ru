@@ -11,7 +11,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "links": () => (/* binding */ links)
 /* harmony export */ });
-var links = ["Новые", "Подписки", "Популярные", "Ближайшие"];
+var links = ["Новые", "Подписки", "Ближайшие"];
 
 /***/ }),
 
@@ -281,7 +281,7 @@ function NavBar(props) {
     this.state = {isActive: active};
   }*/
 
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([true].concat(Array(_links__WEBPACK_IMPORTED_MODULE_3__.links.length - 1).fill(false))),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)( /*[true].concat(Array(links.length - 1).fill(false))*/[true, false, false]),
     _useState2 = _slicedToArray(_useState, 2),
     isActive = _useState2[0],
     setIsActive = _useState2[1];

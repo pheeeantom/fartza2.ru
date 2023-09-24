@@ -251,10 +251,15 @@ app.use('/api', usersRouter);
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 app.get("/goods/create", function(request, response) {
-	response.render("goods_create", {
-        page: "goods_create",
-        categories: false
-    });
+	if (request.user) {
+		response.render("goods_create", {
+			page: "goods_create",
+			categories: false
+		});
+	}
+	else {
+		response.status(401).send({error: "Not authorized"});
+	}
 });
 
 app.get("/goods/:id", function(request, response) {

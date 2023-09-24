@@ -400,7 +400,7 @@ function MyCard(props) {
 				{props.isByNick ? null :
 					<p>
 						<a href={props.nickname ? "/user/" + props.nickname : undefined}>{props.nickname ?? "аноним"}</a>
-						<span className='inline-block px-5 float-right text-lg'>{props.rating ?? "-"}<img alt="star" src="/service_photos/star.png" width="20" className='inline'/></span>
+						{/* <span className='inline-block px-5 float-right text-lg'>{props.rating ?? "-"}<img alt="star" src="/service_photos/star.png" width="20" className='inline'/></span> */}
 					</p>
 				}
 				{props.distance && <p><small className="text-muted">{"Расстояние: " + (props.distance / 1000).toFixed(1) + "км"}</small></p>}
