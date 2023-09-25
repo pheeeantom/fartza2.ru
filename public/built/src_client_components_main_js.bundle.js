@@ -169,14 +169,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _store_services_goods_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../store/services/goods_service */ "./src/client/store/services/goods_service.js");
 /* harmony import */ var flowbite_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! flowbite-react */ "./node_modules/flowbite-react/lib/esm/index.js");
-/* harmony import */ var _pbe_react_yandex_maps__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @pbe/react-yandex-maps */ "./node_modules/@pbe/react-yandex-maps/dist/react-yandex-maps.esm.js");
+/* harmony import */ var _pbe_react_yandex_maps__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @pbe/react-yandex-maps */ "./node_modules/@pbe/react-yandex-maps/dist/react-yandex-maps.esm.js");
 /* harmony import */ var _store_services_users_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../store/services/users_service */ "./src/client/store/services/users_service.js");
+/* harmony import */ var _store_services_comment_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../store/services/comment_service */ "./src/client/store/services/comment_service.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -283,17 +285,31 @@ function ProductWrapper(props) {
     distance: data.goods[0][0].distance,
     lat: data.goods[0][0].latitude,
     lon: data.goods[0][0].longitude,
-    login: data.login
+    login: data.login,
+    pageSize: 2
   })));
   //}
 }
 
 function Product(props) {
   var _props$nickname;
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState4 = _slicedToArray(_useState3, 2),
+    since = _useState4[0],
+    setSince = _useState4[1];
   var _useIsFavoriteQuery = (0,_store_services_users_service__WEBPACK_IMPORTED_MODULE_4__.useIsFavoriteQuery)(props.id),
     favs = _useIsFavoriteQuery.data,
     loadingFavs = _useIsFavoriteQuery.isLoading,
     errorFavs = _useIsFavoriteQuery.error;
+  var _useFetchCommentsQuer = (0,_store_services_comment_service__WEBPACK_IMPORTED_MODULE_5__.useFetchCommentsQuery)({
+      id: props.id,
+      args: {
+        since: since
+      }
+    }),
+    coms = _useFetchCommentsQuer.data,
+    loadingComs = _useFetchCommentsQuer.isLoading,
+    errorComs = _useFetchCommentsQuer.error;
   var _useAddToFavoritesMut = (0,_store_services_users_service__WEBPACK_IMPORTED_MODULE_4__.useAddToFavoritesMutation)(),
     _useAddToFavoritesMut2 = _slicedToArray(_useAddToFavoritesMut, 2),
     addToFavorites = _useAddToFavoritesMut2[0],
@@ -326,6 +342,26 @@ function Product(props) {
   	else
   		img.push(<div className="carousel-item"><img className="d-block w-100" src={"/goods_photos/" + this.props.img[i]} alt={"Slide " + i}/></div>);
   }*/
+
+  function move(arg) {
+    if (arg === "left") {
+      setSince(since - 1);
+      /*let searchParams = new URLSearchParams(location.search);
+      searchParams.set('since', (this.props.lastArgs.since - 1).toString());
+      window.history.replaceState({}, '', `${location.pathname}?${searchParams}`);*/
+    } else if (arg === "right") {
+      setSince(since + 1);
+      /*let searchParams = new URLSearchParams(location.search);
+      searchParams.set('since', (this.props.lastArgs.since + 1).toString());
+      window.history.replaceState({}, '', `${location.pathname}?${searchParams}`);*/
+    } else {
+      setSince(arg - 1);
+      /*let searchParams = new URLSearchParams(location.search);
+      searchParams.set('since', arg.toString());
+      window.history.replaceState({}, '', `${location.pathname}?${searchParams}`);*/
+    }
+  }
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "w-4/5 md:3/4 lg:w-1/3 mx-auto mt-10"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(flowbite_react__WEBPACK_IMPORTED_MODULE_3__.Card, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -383,14 +419,56 @@ function Product(props) {
     className: "text-muted"
   }, dateStr)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("small", {
     className: "text-muted"
-  }, "\u041F\u0440\u043E\u0441\u043C\u043E\u0442\u0440\u044B: ", props.views)), props.lat && props.lon ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_pbe_react_yandex_maps__WEBPACK_IMPORTED_MODULE_5__.YMaps, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_pbe_react_yandex_maps__WEBPACK_IMPORTED_MODULE_5__.Map, {
+  }, "\u041F\u0440\u043E\u0441\u043C\u043E\u0442\u0440\u044B: ", props.views)), props.lat && props.lon ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_pbe_react_yandex_maps__WEBPACK_IMPORTED_MODULE_6__.YMaps, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_pbe_react_yandex_maps__WEBPACK_IMPORTED_MODULE_6__.Map, {
     defaultState: {
       center: [props.lat, props.lon],
       zoom: 9
     }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_pbe_react_yandex_maps__WEBPACK_IMPORTED_MODULE_5__.Placemark, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_pbe_react_yandex_maps__WEBPACK_IMPORTED_MODULE_6__.Placemark, {
     geometry: [props.lat, props.lon]
-  }))) : null))));
+  }))) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    className: "text-2xl"
+  }, "\u041A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0438:"), props.login ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
+    action: "/api/comments/" + props.id,
+    method: "post",
+    enctype: "multipart/form-data"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", {
+    name: "text",
+    className: "border border-neutral-400"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    type: "submit",
+    className: "btn"
+  }, "\u041E\u0442\u043F\u0440\u0430\u0432\u0438\u0442\u044C")) : null, loadingComs ? 'Подождите, идет загрузка...' : errorComs ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("small", {
+    className: "text-muted"
+  }, errorComs.data.error) : coms.comments[0].rows.map(function (com) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Comment, {
+      text: com.text,
+      createdAt: com.created_at,
+      nick: com.user.nickname,
+      avatar: com.user.avatar
+    });
+  }), errorComs ? null : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, coms && coms.comments[0].count > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    onClick: function onClick() {
+      return since > 0 && move("left");
+    }
+  }, "<") : null, coms && coms.comments[0].count > 0 && since > 1 ? "..." : null, coms && coms.comments[0].count > 0 && since > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    onClick: function onClick() {
+      return move(since);
+    }
+  }, since) : null, coms && coms.comments[0].count > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    className: "underline",
+    onClick: function onClick() {
+      return move(since + 1);
+    }
+  }, since + 1) : null, coms && coms.comments[0].count > (since + 1) * props.pageSize ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    onClick: function onClick() {
+      return move(since + 2);
+    }
+  }, since + 2) : null, coms && coms.comments[0].count > (since + 2) * props.pageSize ? "..." : null, coms && coms.comments[0].count > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    onClick: function onClick() {
+      return (since + 1) * props.pageSize < coms.comments[0].count && move("right");
+    }
+  }, ">") : null)))));
 
   /*<div id={"carouselGoodsIndicators" + this.props.id} data-bs-interval="false" className="carousel slide col-xs-12 col-sm-12 col-md-6 col-lg-6" data-bs-ride="carousel" style={{float: 'left'}}>
   	<div className="carousel-indicators">
@@ -408,6 +486,37 @@ function Product(props) {
   	<span className="visually-hidden">Next</span>
   	</button>
   </div>*/
+}
+
+function Comment(props) {
+  var date = new Date(props.createdAt);
+  var dateStr = date.toLocaleString('ru', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "my-5"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+    href: "/user/" + props.nick
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", {
+    style: {
+      height: '35px'
+    },
+    className: "align-middle inline-block"
+  }, props.nick), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+    src: props.avatar ? "/avatars/" + props.avatar : "/service_photos/default_avatar.jpg",
+    alt: "avatar",
+    width: "35",
+    height: "35",
+    className: "inline-block"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    className: "text-xl border-y border-neutral-400"
+  }, props.text), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("small", {
+    className: "text-muted"
+  }, dateStr)));
 }
 
 /*const mapStateToProps = (state) => {

@@ -5,6 +5,7 @@ import categoriesReducer from './reducers/categories_slice';
 import { goodsAPI } from './services/goods_service';
 import { categoriesAPI } from './services/categories_service';
 import { usersAPI } from './services/users_service';
+import { commentsAPI } from './services/comment_service';
 
 /*const rootReducer = combineReducers({
     goodsReducer,
@@ -21,10 +22,11 @@ export const setupStore = () => {
             categoriesReducer,
             [goodsAPI.reducerPath]: goodsAPI.reducer,
             [categoriesAPI.reducerPath]: categoriesAPI.reducer,
-            [usersAPI.reducerPath]: usersAPI.reducer
+            [usersAPI.reducerPath]: usersAPI.reducer,
+            [commentsAPI.reducerPath]: commentsAPI.reducer
         },
         middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(goodsAPI.middleware).concat(categoriesAPI.middleware)
-            .concat(usersAPI.middleware)
+            .concat(usersAPI.middleware).concat(commentsAPI.middleware)
     });
 
     setupListeners(store.dispatch);

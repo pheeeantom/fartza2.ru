@@ -5,6 +5,7 @@ import { Carousel, Card } from "flowbite-react";
 import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 import { useEffect, useState } from "react";
 import { useAddToFavoritesMutation, useRemoveFromFavoritesMutation, useIsFavoriteQuery } from "../store/services/users_service";
+import { useFetchCommentsQuery } from "../store/services/comment_service";
 
 function ProductWrapper(props) {
 	/*constructor(props) {
@@ -89,7 +90,7 @@ function ProductWrapper(props) {
 							<Product id={data.goods[0][0].id} name={data.goods[0][0].name} img={data.goods[0][0].photos} price={data.goods[0][0].price}
 								createdAt={data.goods[0][0].created_at} desc={data.goods[0][0].description} views={data.goods[0][0].views}
 								nickname={data.goods[0][0].user?.nickname} rating={data.goods[0][0].user?.rating} distance={data.goods[0][0].distance}
-								lat={data.goods[0][0].latitude} lon={data.goods[0][0].longitude} login={data.login} />
+								lat={data.goods[0][0].latitude} lon={data.goods[0][0].longitude} login={data.login} pageSize={2} />
 					}
 				</main>
 			</div>
@@ -99,7 +100,10 @@ function ProductWrapper(props) {
 
 function Product (props) {
 
+	const [since, setSince] = useState(0)
+
 	const { data: favs, isLoading: loadingFavs, error: errorFavs } = useIsFavoriteQuery(props.id)
+	const { data: coms, isLoading: loadingComs, error: errorComs } = useFetchCommentsQuery({id: props.id, args: {since}})
 
     const [addToFavorites, result] = useAddToFavoritesMutation()
     const [removeFromFavorites, result2] = useRemoveFromFavoritesMutation()
@@ -127,6 +131,29 @@ function Product (props) {
 		else
 			img.push(<div className="carousel-item"><img className="d-block w-100" src={"/goods_photos/" + this.props.img[i]} alt={"Slide " + i}/></div>);
 	}*/
+
+	function move(arg) {
+		if (arg === "left") {
+			setSince(since - 1);
+			/*let searchParams = new URLSearchParams(location.search);
+			searchParams.set('since', (this.props.lastArgs.since - 1).toString());
+			window.history.replaceState({}, '', `${location.pathname}?${searchParams}`);*/
+		}
+		else if (arg === "right") {
+			setSince(since + 1);
+			/*let searchParams = new URLSearchParams(location.search);
+			searchParams.set('since', (this.props.lastArgs.since + 1).toString());
+			window.history.replaceState({}, '', `${location.pathname}?${searchParams}`);*/
+		}
+		else {
+			setSince(arg - 1);
+			/*let searchParams = new URLSearchParams(location.search);
+			searchParams.set('since', arg.toString());
+			window.history.replaceState({}, '', `${location.pathname}?${searchParams}`);*/
+		
+		}
+	}
+
 	return (
 		<div>
 			<div className="w-4/5 md:3/4 lg:w-1/3 mx-auto mt-10">
@@ -174,6 +201,30 @@ function Product (props) {
 								</YMaps>
 							: null
 						}
+						<p className="text-2xl">Комментарии:</p>
+						{props.login ?
+							<form action={"/api/comments/" + props.id} method="post" enctype="multipart/form-data">
+								<textarea name="text" className="border border-neutral-400"/>
+								<br/>
+								<button type="submit" className="btn">Отправить</button> 
+							</form> : null}
+						{loadingComs ?
+								'Подождите, идет загрузка...' :
+							errorComs ?
+								<small className="text-muted">{errorComs.data.error}</small> : 
+								coms.comments[0].rows.map(com => <Comment text={com.text} createdAt={com.created_at}
+									nick={com.user.nickname} avatar={com.user.avatar}/>)}
+						{errorComs ? null : (
+							<div>
+								{coms && coms.comments[0].count > 0 ? <button onClick={() => since > 0 && move("left")}>&#60;</button> : null}
+								{coms && coms.comments[0].count > 0 && since > 1 ? "..." : null}
+								{coms && coms.comments[0].count > 0 && since > 0	? <button onClick={() => move(since)}>{since}</button> : null}
+								{coms && coms.comments[0].count > 0 ? <button className="underline" onClick={() => move(since + 1)}>{since + 1}</button> : null}
+								{coms && coms.comments[0].count > (since + 1) * props.pageSize ? <button onClick={() => move(since + 2)}>{since + 2}</button> : null}
+								{coms && coms.comments[0].count > (since + 2) * props.pageSize ? "..." : null}
+								{coms && coms.comments[0].count > 0 ? <button onClick={() => (since + 1) * props.pageSize < coms.comments[0].count && move("right")}>&#62;</button> : null}	
+						</div>
+						)}
 					</div>
 				</Card>
 			</div>
@@ -196,6 +247,28 @@ function Product (props) {
 		<span className="visually-hidden">Next</span>
 		</button>
 	</div>*/
+}
+
+function Comment(props) {
+	let date = new Date(props.createdAt);
+	let dateStr = date.toLocaleString('ru', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+		hour: 'numeric',
+		minute: 'numeric'
+	});
+
+	return (
+		<div className="my-5">
+			<a href={"/user/" + props.nick}>
+				<h3 style={{height: '35px'}} className="align-middle inline-block">{props.nick}</h3>
+				<img src={props.avatar ? "/avatars/" + props.avatar : "/service_photos/default_avatar.jpg"} alt="avatar" width="35" height="35" className="inline-block"/>
+			</a>
+			<p className="text-xl border-y border-neutral-400">{props.text}</p>
+			<p><small className="text-muted">{dateStr}</small></p>
+		</div>
+	)
 }
 
 /*const mapStateToProps = (state) => {

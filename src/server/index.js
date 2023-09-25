@@ -5,6 +5,7 @@ const app = express();
 const goodsRouter = require('./routes/goods');
 const categoriesRouter = require('./routes/categories');
 const usersRouter = require('./routes/users');
+const commentsRouter = require('./routes/comments');
 const pool = require('./lib/db');
 const usersController = require('./controllers/users_controller');
 const goodsController = require('./controllers/goods_controller');
@@ -248,6 +249,7 @@ app.get('/logout', function(req, res, next) {
 app.use('/api', goodsRouter);
 app.use('/api', categoriesRouter);
 app.use('/api', usersRouter);
+app.use('/api', commentsRouter);
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 app.get("/goods/create", function(request, response) {
@@ -268,6 +270,8 @@ app.get("/goods/:id", function(request, response) {
 			console.log(err.message);
 		});
 	response.render("index");
+	//response.status(578).send();
+	//response.status(200).send({i: request.user.id.fff.dsd});
 });
 
 app.use(express.static('public'));
