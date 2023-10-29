@@ -330,11 +330,11 @@ exports.create = (request, response, next) => {
             // show body `req.body`
             //res.status(200).end('Your files uploaded.');
             Goods.create({
-                name: request.body.name,
-                description: request.body.description,
-                price: request.body.price,
-                latitude: request.body.latitude,
-                longitude: request.body.longitude,
+                name: request.body.name.slice(0,64),
+                description: request.body.description.slice(0,128),
+                price: request.body.price === "" ? undefined : request.body.price.replace(/\s+/g, '').replace(',', '.'),
+                latitude: request.body.latitude !== "" ? request.body.latitude : undefined,
+                longitude: request.body.longitude !== "" ? request.body.longitude : undefined,
                 userId: request.user.id,
                 photos: request.files.map(image => image.filename)
             }).then(result => {

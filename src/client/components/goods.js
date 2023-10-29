@@ -165,7 +165,7 @@ function Product (props) {
 					</div>
 					<div className="card-one-goods pt-5">
 						<div className="flex items-start">
-							<h5 className="text-3xl w-4/5 inline-block mr-3">{props.name}</h5>
+							<h5 className="text-3xl w-4/5 inline-block mr-3 break-words">{props.name}</h5>
 							{props.login ? loadingFavs ?
 								'Подождите, идет загрузка...' :
 							errorFavs ?
@@ -183,8 +183,8 @@ function Product (props) {
 									</button>
 								: null}
 						</div>
-						<p>{props.desc}</p>
-						<p>{props.price + "₽"}</p>
+						<p className="break-words">{props.desc}</p>
+						{props.price ? <p>{props.price + "₽"}</p> : null}
 						<p>
 							<a href={props.nickname ? "/user/" + props.nickname : undefined}>{props.nickname ?? "аноним"}</a>
 							{/* <span className='inline-block px-5 float-right text-lg'>{props.rating ?? "-"}<img alt="star" src="/service_photos/star.png" width="20" className='inline'/></span> */}
@@ -265,7 +265,7 @@ function Comment(props) {
 				<h3 style={{height: '35px'}} className="align-middle inline-block">{props.nick}</h3>
 				<img src={props.avatar ? "/avatars/" + props.avatar : "/service_photos/default_avatar.jpg"} alt="avatar" width="35" height="35" className="inline-block"/>
 			</a>
-			<p className="text-xl border-y border-neutral-400">{props.text}</p>
+			<p className="text-xl border-y border-neutral-400 break-words">{props.text}</p>
 			<p><small className="text-muted">{dateStr}</small></p>
 		</div>
 	)

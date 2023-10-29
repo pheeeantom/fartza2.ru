@@ -24,6 +24,9 @@ var session = require('express-session');
 var mysql2 = require('mysql2/promise');
 var MySQLStore = require('express-mysql-session')(session);
 
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
 const hour = 3600000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -199,7 +202,7 @@ app.post("/registrate", /*function(req, res, next) {
         });*/
 /*}, */function(request, response, next) {
 	console.log(request.body);
-	if (request.body.nickname.match(/^.{2,}$/) && request.body.email.match(/^[a-z0-9_.-]+@[a-z0-9-]+\.[a-z]{2,}$/) &&
+	if (request.body.nickname.match(/^.{2,8}$/) && request.body.email.match(/^[a-z0-9_.-]+@[a-z0-9-]+\.[a-z]{2,}$/) &&
 		request.body.password[0].match(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}$/) &&
 		request.body.password[0] === request.body.password[1]) {
 		let connection = DB.createConn();
@@ -280,4 +283,4 @@ app.use(function(request, response, next) {
 	response.sendStatus(404);
 });
 
-app.listen(3000);
+server.listen(3000);

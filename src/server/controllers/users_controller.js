@@ -208,11 +208,11 @@ exports.edit = (request, response, next) => {
                 return;
             }
             Users.update({
-                    name: request.body.name,
-                    surname: request.body.surname,
+                    name: request.body.name.slice(0,32),
+                    surname: request.body.surname.slice(0,32),
                     avatar: request.file && request.file.filename ? request.file.filename : undefined,//request.files && valid ? request.user.nickname + '.' + request.files.photo.name.split('.').pop() : undefined,
-                    about: request.body.about,
-                    city: request.body.city,
+                    about: request.body.about.slice(0,128),
+                    city: request.body.city.slice(0,32),
                     birthday: request.body.birthday === "" ? undefined : request.body.birthday,
                     //salt,
                     //password_hash

@@ -78,7 +78,7 @@ function LogReg(props) {
     as: "a",
     href: "/user/" + data.user.nickname,
     target: "_blank"
-  }, "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(flowbite_react__WEBPACK_IMPORTED_MODULE_2__.Dropdown.Item, {
+  }, "\u041F\u0440\u043E\u0444\u0438\u043B\u044C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(flowbite_react__WEBPACK_IMPORTED_MODULE_2__.Dropdown.Item, {
     as: "a",
     href: "/logout",
     target: "_blank"

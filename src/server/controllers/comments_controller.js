@@ -29,7 +29,7 @@ exports.get = (request, response, next) => {
 exports.post = (request, response, next) => {
     upload(request, response, function (err) {
         if (request.user) {
-            Comments.create({userId: request.user.id, goodId: request.params["id"], text: request.body.text}).then(result => {
+            Comments.create({userId: request.user.id, goodId: request.params["id"], text: request.body.text.slice(0,128)}).then(result => {
                 response.status(200).redirect("/goods/" + request.params["id"]);
             }).catch(err => {
                 response.status(500).send({error: err.message});

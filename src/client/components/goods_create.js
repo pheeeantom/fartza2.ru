@@ -35,7 +35,8 @@ class GoodsCreateForm extends React.Component {
 		document.getElementById("longitude").value = position.coords.longitude;
 	}
 	componentDidMount() {
-		this.getLocation();
+		document.getElementById("latitude").value = "";
+		document.getElementById("longitude").value = "";
 		this.props.fetchAllCategories();
 	}
 	validFileSize(file) {
@@ -154,8 +155,8 @@ class GoodsCreateForm extends React.Component {
 		}
 		return (
 			<div>
-				<div className="col-md-3 col-lg-4" style={{float: 'left'}}>&nbsp;</div>
-				<div className="col-xs-12 col-sm-12 col-md-6 col-lg-4" style={{float: 'left'}}>
+				<div className="col-md-3 col-lg-4 float-md-start float-lg-start">&nbsp;</div>
+				<div className="col-xs-12 col-sm-12 col-md-6 col-lg-4 float-md-start float-lg-start">
 					<h2 style={{textAlign: 'center'}}>Создать товар</h2>
 					<form action="/api/goods/create" method="post" autoComplete="off" enctype="multipart/form-data">
 						<div className="mb-3">
@@ -180,6 +181,7 @@ class GoodsCreateForm extends React.Component {
 						    id="price"
 						    name="price"
 						    decimalsLimit={2}
+							maxLength={12}
 						  />
 						</div>
 						<div className="mb-3">
@@ -188,6 +190,7 @@ class GoodsCreateForm extends React.Component {
 								{this.props.fetchAllCategoriesState().data?.categories[0][0].map(cat => <option value={cat.id}>{cat.type}</option>)}
 							</select>
 						</div>
+						<input onChange={e => {if(e.target.value) { this.getLocation() } else { document.getElementById("latitude").value = ""; document.getElementById("longitude").value = ""; }}} type="checkbox"/>
 						<input type="hidden" id="latitude" name="latitude"/>
 						<input type="hidden" id="longitude" name="longitude"/>
 						<div>

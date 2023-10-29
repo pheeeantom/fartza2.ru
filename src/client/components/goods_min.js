@@ -395,8 +395,8 @@ function MyCard(props) {
 				<Carousel className="goods-carousel" slide={false} indicators={false}>
 					{props.img.map(img => <img src={"/goods_photos/" + img} alt="slide" />)}
 				</Carousel>
-				<a href={"/goods/" + props.id} target="_blank" style={{color: "black"}}><h5>{props.name.length > 45 ? props.name.substring(0, 20) + "..." : props.name}</h5></a>
-				<p>{props.price + "₽"}</p>
+				<a href={"/goods/" + props.id} target="_blank" style={{color: "black"}}><h5 className="break-words">{props.name.length > 45 ? props.name.substring(0, 20) + "..." : props.name}</h5></a>
+				{props.price ? <p>{props.price + "₽"}</p> : null}
 				{props.isByNick ? null :
 					<p>
 						<a href={props.nickname ? "/user/" + props.nickname : undefined}>{props.nickname ?? "аноним"}</a>

@@ -284,7 +284,7 @@ class Nickname extends React.Component {
 	}
 	handleInput(event) {
 		this.props.showTips();
-		if (event.target.value.match(/^.{2,}$/)) {
+		if (event.target.value.match(/^.{2,8}$/)) {
 			//setState - асинхронная функция поэтому чтобы использовать результат ее выполнения нужно
 			//запускать функцию после нее в аргументах
 			this.setState({isPassed: true}, () => this.props.manipulteSubmit());

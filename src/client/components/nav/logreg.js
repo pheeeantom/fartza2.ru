@@ -40,7 +40,7 @@ function LogReg(props) {
                     Продать
                   </Dropdown.Item>
                   <Dropdown.Item as="a" href={"/user/" + data.user.nickname} target="_blank">
-                    Настройки
+                    Профиль
                   </Dropdown.Item>
                   <Dropdown.Item as="a" href="/logout" target="_blank">
                     Выйти

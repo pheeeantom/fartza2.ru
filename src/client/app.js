@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import FormBar from './components/logreg';
 import Profile from './components/profile';
 import GoodsCreateForm from './components/goods_create';
+import Chat from './components/chat';
 
 export const store = setupStore();
 
@@ -67,6 +68,7 @@ class App extends React.Component {
                               <Route path="/logreg" element={<div><FormBar /></div>} />
                               <Route path="/user/:nick" element={<div><NavBar without={true} /><Profile /></div>} />
                               <Route path="/create" element={<div><GoodsCreateForm /></div>} />
+                              <Route path="/chat" element={<div><Chat /></div>} />
                             </Routes>
                         </Suspense>
                     </Router>

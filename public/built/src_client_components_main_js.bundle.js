@@ -380,7 +380,7 @@ function Product(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "flex items-start"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h5", {
-    className: "text-3xl w-4/5 inline-block mr-3"
+    className: "text-3xl w-4/5 inline-block mr-3 break-words"
   }, props.name), props.login ? loadingFavs ? 'Подождите, идет загрузка...' : errorFavs ? errorFavs.data.error : favs.isFavorite && !errorFavs ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     onClick: function onClick() {
       return removeFromFavorites(props.id);
@@ -411,7 +411,9 @@ function Product(props) {
     "stroke-linejoin": "round",
     "stroke-width": "2",
     d: "m13 19-6-5-6 5V2a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17Z"
-  }))) : null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, props.desc), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, props.price + "₽"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+  }))) : null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    className: "break-words"
+  }, props.desc), props.price ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, props.price + "₽") : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
     href: props.nickname ? "/user/" + props.nickname : undefined
   }, (_props$nickname = props.nickname) !== null && _props$nickname !== void 0 ? _props$nickname : "аноним")), props.distance && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("small", {
     className: "text-muted"
@@ -513,7 +515,7 @@ function Comment(props) {
     height: "35",
     className: "inline-block"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
-    className: "text-xl border-y border-neutral-400"
+    className: "text-xl border-y border-neutral-400 break-words"
   }, props.text), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("small", {
     className: "text-muted"
   }, dateStr)));
