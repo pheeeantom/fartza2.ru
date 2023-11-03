@@ -4,16 +4,20 @@ import ReactDOM from 'react-dom/client';
 import { setupStore } from './store/store';
 import { Provider } from 'react-redux';
 //import './styles/output.css';
-import FormBar from './components/logreg';
-import Profile from './components/profile';
-import GoodsCreateForm from './components/goods_create';
-import Chat from './components/chat';
+//import FormBar from './components/logreg';
+//import Profile from './components/profile';
+//import GoodsCreateForm from './components/goods_create';
+//import Chat from './components/chat';
 
 export const store = setupStore();
 
 const Search = lazy(() => import('./components/search.js'));
 const NavBar = lazy(() => import('./components/nav/nav_bar.js'));
 const Main = lazy(() => import('./components/main.js'));
+const FormBar = lazy(() => import('./components/logreg'));
+const Profile = lazy(() => import('./components/profile'));
+const GoodsCreateForm = lazy(() => import('./components/goods-create'));
+const Chat = lazy(() => import('./components/chat'));
 
 class ErrorBoundary extends React.Component {
     constructor(props) {

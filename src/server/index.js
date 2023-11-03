@@ -1,3 +1,4 @@
+var compression = require('compression');
 const express = require("express");
 const expressHbs = require("express-handlebars");
 //var fileUpload = require('express-fileupload');
@@ -26,6 +27,8 @@ var MySQLStore = require('express-mysql-session')(session);
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+
+app.use(compression());
 
 const hour = 3600000;
 app.use(bodyParser.json());

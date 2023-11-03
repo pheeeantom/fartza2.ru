@@ -286,7 +286,8 @@ function GoodsMin(props) {
 			else {
 				rows = data.goods[0].rows.map((goods) => <MyCard id={goods.id} name={goods.name} img={goods.photos} price={goods.price}
 					createdAt={goods.created_at} nickname={goods.user?.nickname}
-					rating={goods.user?.rating} distance={goods.distance} key={goods.id} isByNick={props.option === "profile"} />);
+					rating={goods.user?.rating} distance={goods.distance} key={goods.id} isByNick={props.option === "profile"}
+					isAuthorized={data.authorized} />);
 			}
 		}
 
@@ -386,7 +387,7 @@ function MyCard(props) {
 				</div>
 			</div>*/
 			<Card className="h-96 mb-5 bg-neutral-200">
-				{props.isByNick ? <>
+				{props.isByNick && props.isAuthorized ? <>
 					<form action={"/api/goods/" + props.id} method="post" enctype="multipart/form-data">
 						<input type="hidden" name="status" value="deleted" />
 						<button type="submit" className="btn">Удалить</button> 

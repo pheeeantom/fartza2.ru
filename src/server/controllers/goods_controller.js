@@ -266,7 +266,7 @@ exports.getSingle = (request, response, next) => {
 };
 
 exports.getByNick = (request, response, next) => {
-    if (request.user.nickname === request.params["nick"]) {
+    //if (request.user.nickname === request.params["nick"]) {
         var lat = parseFloat(request.query.lat);
         var lng = parseFloat(request.query.lon);
         var attr = ['id', 'name', 'price', 'description', 'photos', 'created_at', 'views', 'status', 'latitude', 'longitude', 'userId'];
@@ -286,14 +286,14 @@ exports.getByNick = (request, response, next) => {
                 response.status(404).send({error: 'Данный пользователь не публиковал товаров'});
                 return;
             }
-            response.json( { 'goods': [result] } );
+            response.json( { 'goods': [result], 'authorized': request.user.nickname === request.params["nick"] } );
         }).catch(err => {
             response.status(500).send({error: err});
         });
-    }
+    /*}
     else {
         response.status(401).send({error: "Not authorized"});
-    }
+    }*/
 };
 
 exports.create = (request, response, next) => {
