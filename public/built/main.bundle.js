@@ -9150,10 +9150,13 @@ var Profile = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function 
   return Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_flowbite-react_lib_esm_index_js"), __webpack_require__.e("src_client_components_goods_min_js"), __webpack_require__.e("src_client_components_profile_js")]).then(__webpack_require__.bind(__webpack_require__, /*! ./components/profile */ "./src/client/components/profile.js"));
 });
 var GoodsCreateForm = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
-  return Promise.resolve().then(function webpackMissingModule() { var e = new Error("Cannot find module './components/goods-create'"); e.code = 'MODULE_NOT_FOUND'; throw e; });
+  return Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_react-currency-input-field_dist_index_esm_js"), __webpack_require__.e("src_client_components_goods_create_js")]).then(__webpack_require__.bind(__webpack_require__, /*! ./components/goods_create */ "./src/client/components/goods_create.js"));
 });
 var Chat = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
   return Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_socket_io-client_build_esm_index_js"), __webpack_require__.e("src_client_components_chat_js")]).then(__webpack_require__.bind(__webpack_require__, /*! ./components/chat */ "./src/client/components/chat.js"));
+});
+var Footer = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
+  return __webpack_require__.e(/*! import() */ "src_client_components_footer_js").then(__webpack_require__.bind(__webpack_require__, /*! ./components/footer */ "./src/client/components/footer.js"));
 });
 var ErrorBoundary = /*#__PURE__*/function (_React$Component) {
   _inherits(ErrorBoundary, _React$Component);
@@ -9213,12 +9216,12 @@ var App = /*#__PURE__*/function (_React$Component2) {
         fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, "Loading...")
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Routes, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Route, {
         path: "/",
-        element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(NavBar, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Search, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Main, null))
+        element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(NavBar, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Search, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Main, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Footer, null))
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Route, {
         path: "/goods/:id",
         element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(NavBar, {
           without: true
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Main, null))
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Main, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Footer, null))
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Route, {
         path: "/logreg",
         element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(FormBar, null))
@@ -9226,7 +9229,7 @@ var App = /*#__PURE__*/function (_React$Component2) {
         path: "/user/:nick",
         element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(NavBar, {
           without: true
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Profile, null))
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Profile, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Footer, null))
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Route, {
         path: "/create",
         element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(GoodsCreateForm, null))

@@ -28,6 +28,8 @@ var MySQLStore = require('express-mysql-session')(session);
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+const limit = require("express-limit").limit;
+
 app.use(compression());
 
 const hour = 3600000;
@@ -116,45 +118,68 @@ app.engine('hbs', expressHbs.engine(
 
 app.set('view engine', 'hbs');
 
-app.get("/", function(request, response) {
-	response.render("index", {
-        page: "index",
-        categories: true
-    });
-});
-
-app.get("/user/:nick", function(request, response) {
-	response.render("index", {
-        page: "index",
-        categories: false
-    });
-});
-
-app.get("/logreg", function(request, response) {
-	if (!request.user) {
+app.get("/",
+	limit({
+		max: 3,
+		period: 10 * 1000,
+	}),
+	function(request, response) {
 		response.render("index", {
-        	categories: false,
-        	page: "index",
-			bootstrap: true
-    	});
+			page: "index",
+			categories: true
+		});
 	}
-	else {
-		response.redirect('/user/' + request.user.nickname);
-	}
-});
+);
 
-app.get("/create", function(request, response) {
-	if (!request.user) {
-		response.status(401).send();
-	}
-	else {
+app.get("/user/:nick",
+	limit({
+		max: 3,
+		period: 10 * 1000,
+	}),	
+	function(request, response) {
 		response.render("index", {
-        	categories: false,
-        	page: "index",
-			bootstrap: true
-    	});
+			page: "index",
+			categories: false
+		});
 	}
-});
+);
+
+app.get("/logreg",
+	limit({
+		max: 3,
+		period: 10 * 1000,
+	}),
+	function(request, response) {
+		if (!request.user) {
+			response.render("index", {
+				categories: false,
+				page: "index",
+				bootstrap: true
+			});
+		}
+		else {
+			response.redirect('/user/' + request.user.nickname);
+		}
+	}
+);
+
+app.get("/create",
+	limit({
+		max: 3,
+		period: 10 * 1000,
+	}), function(request, response) {
+		if (!request.user) {
+			response.status(401).send();
+		}
+		else {
+			response.render("index", {
+				categories: false,
+				page: "index",
+				bootstrap: true
+			});
+		}
+	}
+);
 
 app.post("/login", /*function(req, res, next) {
 	//console.log(req.cookies.captcha)
@@ -177,9 +202,14 @@ app.post("/login", /*function(req, res, next) {
                 });
             }
         });*/
-/*}, */passport.authenticate('local', {
-  successRedirect: '/profile',
-  failureRedirect: '/logreg?invalid=true'
+/*}, */
+	limit({
+		max: 5, // 5 requests
+		period: 60 * 1000, // per minute (60 seconds)
+	}),
+	passport.authenticate('local', {
+	successRedirect: '/profile',
+	failureRedirect: '/logreg?invalid=true'
 }));
 
 app.post("/registrate", /*function(req, res, next) {
@@ -258,27 +288,37 @@ app.use('/api', usersRouter);
 app.use('/api', commentsRouter);
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-app.get("/goods/create", function(request, response) {
-	if (request.user) {
-		response.render("goods_create", {
-			page: "goods_create",
-			categories: false
-		});
+app.get("/goods/create", 
+	limit({
+		max: 3,
+		period: 10 * 1000,
+	}), function(request, response) {
+		if (request.user) {
+			response.render("goods_create", {
+				page: "goods_create",
+				categories: false
+			});
+		}
+		else {
+			response.status(401).send({error: "Not authorized"});
+		}
 	}
-	else {
-		response.status(401).send({error: "Not authorized"});
-	}
-});
+);
 
-app.get("/goods/:id", function(request, response) {
-	pool.execute("UPDATE `goods` SET `views` = `views` + 1 WHERE id = " + request.params["id"] + ";")
-		.catch(err => {
-			console.log(err.message);
-		});
-	response.render("index");
-	//response.status(578).send();
-	//response.status(200).send({i: request.user.id.fff.dsd});
-});
+app.get("/goods/:id", 
+	limit({
+		max: 3,
+		period: 10 * 1000,
+	}), function(request, response) {
+		pool.execute("UPDATE `goods` SET `views` = `views` + 1 WHERE id = " + request.params["id"] + ";")
+			.catch(err => {
+				console.log(err.message);
+			});
+		response.render("index");
+		//response.status(578).send();
+		//response.status(200).send({i: request.user.id.fff.dsd});
+	}
+);
 
 app.use(express.static('public'));
 

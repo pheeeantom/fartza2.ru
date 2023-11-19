@@ -45,7 +45,8 @@ function Profile(props) {
                 surname: data.user[0][0].surname,
                 about: data.user[0][0].about,
                 city: data.user[0][0].city,
-                birthday: data.user[0][0].birthday
+                birthday: data.user[0][0].birthday,
+                telegram: data.user[0][0].contacts?.telegram
             });
     }, [data]);
 
@@ -77,6 +78,7 @@ function Profile(props) {
                             <p className="text-3xl break-words">{data.user[0][0].name && data.user[0][0].surname ? data.user[0][0].name + " " + data.user[0][0].surname : data.user[0][0].name ? data.user[0][0].name : "Аноним"}</p>
                             <p className="text-xl mt-8 break-words">{data.user[0][0].about}</p>
                             <p className="text-3xl mt-8 break-words">{data.user[0][0].city}</p>
+                            {data.user[0][0].contacts && data.user[0][0].contacts.telegram ? <p className="text-3xl mt-8 break-words underline"><a href={data.user[0][0].contacts.telegram}>Телеграм</a></p> : null}
                             {/* <div className="mt-8">
                                 <Rating size={"md"}>
                                     <Rating.Star filled={data.user[0][0].rating > 0.5} />
@@ -120,6 +122,9 @@ function Profile(props) {
                                 </div>
                                 <div className="my-2">
                                     <label for="birthday" className="inline-block w-1/3">Др:</label><input value={inputs?.birthday} onInput={input} name="birthday" type="date" id="birthday" className="w-2/3 border border-neutral-400"/>
+                                </div>
+                                <div className="my-2">
+                                    <label for="telegram" className="inline-block w-1/3">Телеграм(ссылка):</label><input value={inputs?.telegram} onInput={input} name="telegram" id="telegram" className="w-2/3 border border-neutral-400"/>
                                 </div>
                                 <div className="my-2">
                                     <label className="inline-block w-1/3">Пароль:</label><input name="pass" className="w-2/3 border border-neutral-400" pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}$"/>

@@ -15,8 +15,10 @@
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "express": "^4.18.2",
+    "express-csrf": "^0.3.4",
     "express-fileupload": "^1.4.0",
     "express-handlebars": "^7.0.4",
+    "express-limit": "^1.0.0",
     "express-mysql-session": "^3.0.0",
     "express-session": "^1.17.3",
     "flowbite": "^1.7.0",
@@ -39,6 +41,7 @@
     "react-tinder-card": "^1.6.2",
     "redux": "^4.2.1",
     "sequelize": "^6.30.0",
+    "sharp": "^0.32.6",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2"
   },

@@ -66,6 +66,9 @@ module.exports = (sequelize) => {
         },*/
         rating: {
             type: DataTypes.FLOAT
+        },
+        contacts: {
+            type: DataTypes.JSON
         }
     }, {
         timestamps: false

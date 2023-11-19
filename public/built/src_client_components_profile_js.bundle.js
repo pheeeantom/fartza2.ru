@@ -82,12 +82,14 @@ function Profile(props) {
     }
   }
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    var _data$user$0$0$contac;
     if (data) setInputs({
       name: data.user[0][0].name,
       surname: data.user[0][0].surname,
       about: data.user[0][0].about,
       city: data.user[0][0].city,
-      birthday: data.user[0][0].birthday
+      birthday: data.user[0][0].birthday,
+      telegram: (_data$user$0$0$contac = data.user[0][0].contacts) === null || _data$user$0$0$contac === void 0 ? void 0 : _data$user$0$0$contac.telegram
     });
   }, [data]);
   function input(e) {
@@ -143,7 +145,11 @@ function Profile(props) {
     className: "text-xl mt-8 break-words"
   }, data.user[0][0].about), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("p", {
     className: "text-3xl mt-8 break-words"
-  }, data.user[0][0].city), data.login === false ? loadingSubs ? 'Подождите, идет загрузка...' : errorSubs ? errorSubs.data.error : subs.subscriptions[0][0].find(function (e) {
+  }, data.user[0][0].city), data.user[0][0].contacts && data.user[0][0].contacts.telegram ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("p", {
+    className: "text-3xl mt-8 break-words underline"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("a", {
+    href: data.user[0][0].contacts.telegram
+  }, "\u0422\u0435\u043B\u0435\u0433\u0440\u0430\u043C")) : null, data.login === false ? loadingSubs ? 'Подождите, идет загрузка...' : errorSubs ? errorSubs.data.error : subs.subscriptions[0][0].find(function (e) {
     return e.userId === data.user[0][0].id;
   }) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("button", {
     onClick: function onClick() {
@@ -230,6 +236,17 @@ function Profile(props) {
     name: "birthday",
     type: "date",
     id: "birthday",
+    className: "w-2/3 border border-neutral-400"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", {
+    className: "my-2"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("label", {
+    "for": "telegram",
+    className: "inline-block w-1/3"
+  }, "\u0422\u0435\u043B\u0435\u0433\u0440\u0430\u043C(\u0441\u0441\u044B\u043B\u043A\u0430):"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("input", {
+    value: inputs === null || inputs === void 0 ? void 0 : inputs.telegram,
+    onInput: input,
+    name: "telegram",
+    id: "telegram",
     className: "w-2/3 border border-neutral-400"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", {
     className: "my-2"

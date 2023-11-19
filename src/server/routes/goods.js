@@ -10,7 +10,7 @@ router.route('/goods/:id')
 router.route('/goods/nick/:nick')
     .get(goodsController.getByNick);
 router.route('/goods/create')
-    .post(goodsController.create);
+    .post(goodsController.multi_upload, goodsController.create);
 router.route('/goods/:id')
     .post(goodsController.mark);
 module.exports = router;

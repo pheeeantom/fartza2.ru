@@ -10,18 +10,20 @@ const DB = require('../lib/db2');
 const multer = require('multer');
 const path = require('path');
 
+const sharp = require('sharp');
+
 const pageSize = 4;
 
-const storage = multer.diskStorage({
+const storage = multer.memoryStorage(/*{
     destination: function (req, file, cb) {
         cb(null, path.join(__dirname, '../../../public/avatars/'))
     },
     filename: function (req, file, cb) {
         cb(null, req.user.nickname + file.originalname.match(/\..*$/)[0])
     }
-});
+}*/);
 
-const multi_upload = multer({
+exports.multi_upload = multer({
     storage,
     limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
     fileFilter: (req, file, cb) => {
@@ -153,8 +155,7 @@ exports.isFavorite = (request, response, next) => {
     }
 };
 
-exports.edit = (request, response, next) => {
-    //console.log(request.body.birthday === "" ? 1 : 0);
+exports.edit = async (request, response, next) => {
     if (request.user.id == request.params["id"]) {
         let salt;
         let password_hash;
@@ -182,6 +183,95 @@ exports.edit = (request, response, next) => {
                 return;
             }
         }
+        /*if (err instanceof multer.MulterError) {
+            // A Multer error occurred when uploading.
+            response.status(500).send({ error: { message: `Multer uploading error: ${err.message}` } }).end();
+            return;
+        } else if (err) {
+            // An unknown error occurred when uploading.
+            if (err.name == 'ExtensionError') {
+                response.status(413).send({ error: { message: err.message } }).end();
+            } else {
+                response.status(500).send({ error: { message: `unknown uploading error: ${err.message}` } }).end();
+            }
+            return;
+        }*/
+        //console.log(request.file.path);
+        Users.update({
+                name: request.body.name.slice(0,32),
+                surname: request.body.surname.slice(0,32),
+                avatar: request.file ? `${request.user.nickname + '.jpg'}` : undefined,
+                //avatar: request.file && request.file.filename ? request.file.filename : undefined,//request.files && valid ? request.user.nickname + '.' + request.files.photo.name.split('.').pop() : undefined,
+                about: request.body.about.slice(0,128),
+                city: request.body.city.slice(0,32),
+                birthday: request.body.birthday === "" ? undefined : request.body.birthday,
+                contacts: {telegram: request.body.telegram}
+                //salt,
+                //password_hash
+            }, {
+            where: {
+                id: request.params["id"]
+            },
+        }).then(result => {
+            response.status(200).redirect("/user/" + request.user.nickname);//.send("ok");
+        }).catch(err => {
+            response.status(500).send({error: err.message});
+        })
+
+        // req.file includes the buffer
+        // path: where to store resized photo
+        //console.log('../../../public/avatars/');
+        console.log(request.file);
+        //console.log(request.file.originalname.match(/\..*$/)[0]);
+        const path = `${'./public/avatars/' + request.user.nickname + '.jpg'}`;
+
+        console.log(1);
+        // toFile() method stores the image on disk
+        if (request.file)
+            await sharp(request.file.buffer).resize(300,300).jpeg({quality: 50}).toFile(path);
+        //next();
+
+        console.log(2);
+    }
+    else {
+        response.status(401).send({error: "Not authorized"});
+    }
+
+
+
+
+    //console.log(request.body.birthday === "" ? 1 : 0);
+
+
+    /*if (request.user.id == request.params["id"]) {
+        let salt;
+        let password_hash;
+        if (request.body.pass) {
+            if (request.body.pass.match(/^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}$/)) {
+                var result           = '';
+                var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                var charactersLength = characters.length;
+                for ( var i = 0; i < 20; i++ ) {
+                    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                }
+                salt = result;
+                password_hash = require('crypto').createHash('sha256').update(request.body.pass + salt).digest("hex");
+                let conn = DB.createConn();
+                conn.query("UPDATE users SET password_hash=?, salt=? WHERE id=?;",
+                    [password_hash, salt, request.params["id"]],
+                    (err, results, fields) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+            }
+            else {
+                response.status(422).send({error: "Not valid password"});
+                return;
+            }
+        }*/
+
+
         /*let valid = true;
         if (request.files.photo.name.split('.').pop() === 'png' ||
             request.files.photo.name.split('.').pop() === 'jpg' ||
@@ -193,8 +283,10 @@ exports.edit = (request, response, next) => {
         }*/
         //console.log(salt);
         //console.log(password_hash);
-        multi_upload(request, response, function (err) {
-            if (err instanceof multer.MulterError) {
+        //multi_upload(request, response, function (err) {
+
+
+            /*if (err instanceof multer.MulterError) {
                 // A Multer error occurred when uploading.
                 response.status(500).send({ error: { message: `Multer uploading error: ${err.message}` } }).end();
                 return;
@@ -207,6 +299,7 @@ exports.edit = (request, response, next) => {
                 }
                 return;
             }
+            //console.log(request.file.path);
             Users.update({
                     name: request.body.name.slice(0,32),
                     surname: request.body.surname.slice(0,32),
@@ -214,6 +307,7 @@ exports.edit = (request, response, next) => {
                     about: request.body.about.slice(0,128),
                     city: request.body.city.slice(0,32),
                     birthday: request.body.birthday === "" ? undefined : request.body.birthday,
+                    contacts: {telegram: request.body.telegram}
                     //salt,
                     //password_hash
                 }, {
@@ -225,11 +319,12 @@ exports.edit = (request, response, next) => {
             }).catch(err => {
                 response.status(500).send({error: err.message});
             });
-        });
+        //});
+        
     }
     else {
         response.status(401).send({error: "Not authorized"});
-    }
+    }*/
 };
 
 exports.currentUser = (request, response, next) => {

@@ -16,8 +16,9 @@ const NavBar = lazy(() => import('./components/nav/nav_bar.js'));
 const Main = lazy(() => import('./components/main.js'));
 const FormBar = lazy(() => import('./components/logreg'));
 const Profile = lazy(() => import('./components/profile'));
-const GoodsCreateForm = lazy(() => import('./components/goods-create'));
+const GoodsCreateForm = lazy(() => import('./components/goods_create'));
 const Chat = lazy(() => import('./components/chat'));
+const Footer = lazy(() => import('./components/footer'));
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -67,10 +68,10 @@ class App extends React.Component {
                     <Router>
                         <Suspense fallback={<div>Loading...</div>}>
                             <Routes>
-                              <Route path="/" element={<div><NavBar /><Search /><Main /></div>} />
-                              <Route path="/goods/:id" element={<div><NavBar without={true} /><Main /></div>} />
+                              <Route path="/" element={<div><NavBar /><Search /><Main /><Footer /></div>} />
+                              <Route path="/goods/:id" element={<div><NavBar without={true} /><Main /><Footer /></div>} />
                               <Route path="/logreg" element={<div><FormBar /></div>} />
-                              <Route path="/user/:nick" element={<div><NavBar without={true} /><Profile /></div>} />
+                              <Route path="/user/:nick" element={<div><NavBar without={true} /><Profile /><Footer /></div>} />
                               <Route path="/create" element={<div><GoodsCreateForm /></div>} />
                               <Route path="/chat" element={<div><Chat /></div>} />
                             </Routes>

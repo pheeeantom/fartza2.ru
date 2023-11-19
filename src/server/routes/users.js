@@ -20,7 +20,7 @@ router.route("/is_favorite/:id")
     .get(usersController.isFavorite);
 
 router.route('/users/:id')
-    .post(usersController.edit);
+    .post(usersController.multi_upload, usersController.edit);
 
 router.route('/current_user')
     .get(usersController.currentUser);

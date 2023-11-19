@@ -9,6 +9,8 @@ const { request } = require('http');
 //var forms = multer();
 //app.use(forms.array()); 
 
+const sharp = require('sharp');
+const fs = require('fs');
 
 const pageSize = 4;
 
@@ -22,16 +24,16 @@ function genSalt() {
     return result;
 }
 
-const storage = multer.diskStorage({
+const storage = multer.memoryStorage(/*{
     destination: function (req, file, cb) {
         cb(null, path.join(__dirname, '../../../public/goods_photos/'))
     },
     filename: function (req, file, cb) {
         cb(null, genSalt() + '-' + Date.now() + file.originalname.match(/\..*$/)[0])
     }
-});
+}*/);
 
-const multi_upload = multer({
+exports.multi_upload = multer({
     storage,
     limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
     fileFilter: (req, file, cb) => {
@@ -286,8 +288,9 @@ exports.getByNick = (request, response, next) => {
                 response.status(404).send({error: 'Данный пользователь не публиковал товаров'});
                 return;
             }
-            response.json( { 'goods': [result], 'authorized': request.user.nickname === request.params["nick"] } );
+            response.json( { 'goods': [result], 'authorized': request.user?.nickname === request.params["nick"] } );
         }).catch(err => {
+            console.log(err);
             response.status(500).send({error: err});
         });
     /*}
@@ -296,7 +299,7 @@ exports.getByNick = (request, response, next) => {
     }*/
 };
 
-exports.create = (request, response, next) => {
+exports.create = async (request, response, next) => {
     if (request.user) {
         /*if (request.body.images.length === 0) {
             response.status(422).send();
@@ -310,8 +313,8 @@ exports.create = (request, response, next) => {
                 return;
             }
         }*/
-        multi_upload(request, response, function (err) {
-            if (err instanceof multer.MulterError) {
+        //multi_upload(request, response, function (err) {
+            /*if (err instanceof multer.MulterError) {
                 // A Multer error occurred when uploading.
                 response.status(500).send({ error: { message: `Multer uploading error: ${err.message}` } }).end();
                 return;
@@ -323,12 +326,15 @@ exports.create = (request, response, next) => {
                     response.status(500).send({ error: { message: `unknown uploading error: ${err.message}` } }).end();
                 }
                 return;
-            }
+            }*/
+
+            //request.files.forEach(image => sharp(image.path).jpeg({quality: 80}).toFile(image.path, (err, info) => {response.status(500).send({err, info})}));
     
             // Everything went fine.
             // show file `req.files`
             // show body `req.body`
             //res.status(200).end('Your files uploaded.');
+            let paths = request.files.length ? request.files.map(image => request.user.nickname + '/' + genSalt() + '-' + Date.now() + '.jpg') : ['empty.png'];
             Goods.create({
                 name: request.body.name.slice(0,64),
                 description: request.body.description.slice(0,128),
@@ -336,7 +342,7 @@ exports.create = (request, response, next) => {
                 latitude: request.body.latitude !== "" ? request.body.latitude : undefined,
                 longitude: request.body.longitude !== "" ? request.body.longitude : undefined,
                 userId: request.user.id,
-                photos: request.files.map(image => image.filename)
+                photos: paths
             }).then(result => {
                 /*for (let i = 0; i < request.body.images.length; i++) {
                     request.files.images[i].mv('public/avatars/' + request.user.nickname + '/' + result.id + '/' + i + '.' + request.files.images[i].name.split('.').pop());
@@ -360,7 +366,26 @@ exports.create = (request, response, next) => {
             }).catch(err => {
                 response.status(500).send({error: err.message});
             });
-        });
+
+            console.log(request.file);
+            //console.log(request.file.originalname.match(/\..*$/)[0]);
+            //const path = `${'./public/goods_photos/' + request.user.nickname + '.jpg'}`;
+
+            console.log(1);
+            // toFile() method stores the image on disk
+            if (request.files.length) {
+                fs.mkdir(path.join(__dirname, '../../../public/goods_photos/' + request.user.nickname), (err) => { 
+                    if (err) { 
+                        return console.error(err); 
+                    } 
+                    console.log('Directory created successfully!'); 
+                });
+                await paths.forEach((path, index) => sharp(request.files[index].buffer).resize(300,300).jpeg({quality: 50}).toFile('./public/goods_photos/' + path));
+            }
+            //next();
+
+            console.log(2);
+        //});
     }
     else {
         response.status(401).send({error: "Not authorized"});
