@@ -6,6 +6,7 @@ import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 import { useEffect, useState } from "react";
 import { useAddToFavoritesMutation, useRemoveFromFavoritesMutation, useIsFavoriteQuery } from "../store/services/users_service";
 import { useFetchCommentsQuery } from "../store/services/comment_service";
+import { comsNum } from "../../config";
 
 function ProductWrapper(props) {
 	/*constructor(props) {
@@ -90,7 +91,7 @@ function ProductWrapper(props) {
 							<Product id={data.goods[0][0].id} name={data.goods[0][0].name} img={data.goods[0][0].photos} price={data.goods[0][0].price}
 								createdAt={data.goods[0][0].created_at} desc={data.goods[0][0].description} views={data.goods[0][0].views}
 								nickname={data.goods[0][0].user?.nickname} rating={data.goods[0][0].user?.rating} distance={data.goods[0][0].distance}
-								lat={data.goods[0][0].latitude} lon={data.goods[0][0].longitude} login={data.login} pageSize={2} />
+								lat={data.goods[0][0].latitude} lon={data.goods[0][0].longitude} login={data.login} pageSize={comsNum} />
 					}
 				</main>
 			</div>
@@ -195,7 +196,7 @@ function Product (props) {
 						{
 							props.lat && props.lon ?
 								<YMaps>
-									<Map defaultState={{ center: [props.lat, props.lon], zoom: 9}}>
+									<Map width="100%" defaultState={{ center: [props.lat, props.lon], zoom: 9}}>
 										<Placemark geometry={[props.lat, props.lon]} />
 									</Map>
 								</YMaps>

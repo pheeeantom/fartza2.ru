@@ -159,12 +159,12 @@ function Search(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "bg-neutral-300 mb-4"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-    className: "text-center py-4 px-16 md:px-12 flex"
+    className: "text-center py-4 px-5 flex"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
     id: "search",
     type: "text",
     placeholder: "\u041D\u0430\u0439\u0442\u0438...",
-    className: "flex-1 px-2 focus:outline-neutral-400",
+    className: "w-10 sm:w-auto flex-1 px-2 focus:outline-neutral-400",
     onKeyUp: getGoodsEnter
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     className: "bg-zinc-700 hover:bg-zinc-800 text-white font-sans py-2 px-4",

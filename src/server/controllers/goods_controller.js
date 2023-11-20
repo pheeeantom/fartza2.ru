@@ -12,7 +12,7 @@ const { request } = require('http');
 const sharp = require('sharp');
 const fs = require('fs');
 
-const pageSize = 4;
+const pageSize = require('../../config').pageSize;
 
 function genSalt() {
     var result           = '';
@@ -122,7 +122,7 @@ exports.getPage = (request, response, next) => {
                 ]
             }*/
         }).then(result => {
-            if (result.length == 0) {
+            if (result.count == 0) {
                 response.status(404).send({error: 'Ничего не найдено!'});
                 return;
             }

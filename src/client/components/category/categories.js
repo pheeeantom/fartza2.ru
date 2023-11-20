@@ -74,11 +74,11 @@ function CategoriesBar(props) {
 				</aside>
 			</div>
 		</div>*/
-		<span className="text-lg">
+		<div className="text-lg h-96 sm:h-auto overflow-y-scroll sm:overflow-hidden">
 			{rows}
 			<div>-----</div>
 			<button onClick={clear}>Очистить</button>
-		</span>
+		</div>
 	);
 }
 

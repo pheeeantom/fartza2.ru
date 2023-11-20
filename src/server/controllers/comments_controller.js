@@ -2,7 +2,7 @@ const { Comments, Users } = require("../db/sequelize");
 const multer = require('multer');
 
 
-const pageSize = 2;
+const pageSize = require('../../config').comsNum;
 
 var upload = multer({ dest: null }).single(null);
 

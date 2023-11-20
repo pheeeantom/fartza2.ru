@@ -12,6 +12,8 @@ import { useEffect } from 'react';
 import { useFetchGoodsByNickQuery } from '../store/services/goods_service';
 import { useGetFavoritesQuery } from '../store/services/users_service';
 
+import { pageSize } from '../../config';
+
 function GoodsMin(props) {
 //	unsubscribe = null;
 
@@ -306,7 +308,7 @@ function GoodsMin(props) {
 			  		{rows}
 				</main>
 				{error ? null : (
-					<div className={props.pageSize === 2 ? "pl-7" : null}>
+					<div className={props.pageSize === pageSize / 2 ? "pl-7" : null}>
 						{data && count > 0 ? <button onClick={() => lastArgs?.since > 0 && move("left")}>&#60;</button> : null}
 						{data && count > 0 && lastArgs?.since > 1 ? "..." : null}
 						{data && count > 0 && lastArgs?.since > 0	? <button onClick={() => move(lastArgs?.since)}>{lastArgs?.since}</button> : null}

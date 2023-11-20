@@ -130,8 +130,8 @@ function Search(props) {
 	//render() {
 		return (
 			<div className="bg-neutral-300 mb-4">
-				<div className="text-center py-4 px-16 md:px-12 flex">
-					<input id="search" type="text" placeholder="Найти..." className="flex-1 px-2 focus:outline-neutral-400" onKeyUp={getGoodsEnter} />
+				<div className="text-center py-4 px-5 flex">
+					<input id="search" type="text" placeholder="Найти..." className="w-10 sm:w-auto flex-1 px-2 focus:outline-neutral-400" onKeyUp={getGoodsEnter} />
 					<button className="bg-zinc-700 hover:bg-zinc-800 text-white font-sans py-2 px-4" onClick={getGoods} >Найти!</button>
 				</div>
 			</div>

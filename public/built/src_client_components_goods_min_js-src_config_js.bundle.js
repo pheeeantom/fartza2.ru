@@ -1,4 +1,4 @@
-(self["webpackChunkfartza_ru"] = self["webpackChunkfartza_ru"] || []).push([["src_client_components_goods_min_js"],{
+(self["webpackChunkfartza_ru"] = self["webpackChunkfartza_ru"] || []).push([["src_client_components_goods_min_js-src_config_js"],{
 
 /***/ "./src/client/components/goods_min.js":
 /*!********************************************!*\
@@ -20,14 +20,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flowbite_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! flowbite-react */ "./node_modules/flowbite-react/lib/esm/index.js");
 /* harmony import */ var _math_distance__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../math/distance */ "./src/client/math/distance.js");
 /* harmony import */ var _store_services_users_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../store/services/users_service */ "./src/client/store/services/users_service.js");
-/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../config */ "./src/config.js");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-
 
 
 
@@ -353,7 +351,7 @@ function GoodsMin(props) {
     react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("main", {
       id: props.option !== "profile" ? "goods-min" : "profile-goods-min"
     }, rows), error ? null : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
-      className: props.pageSize === _config__WEBPACK_IMPORTED_MODULE_8__.pageSize / 2 ? "pl-7" : null
+      className: props.pageSize === pageSize / 2 ? "pl-7" : null
     }, data && count > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       onClick: function onClick() {
         return (lastArgs === null || lastArgs === void 0 ? void 0 : lastArgs.since) > 0 && move("left");
@@ -787,9 +785,8 @@ function toRad(Value) {
 /***/ ((module) => {
 
 module.exports.pageSize = 8;
-module.exports.comsNum = 5;
 
 /***/ })
 
 }]);
-//# sourceMappingURL=src_client_components_goods_min_js.bundle.js.map
+//# sourceMappingURL=src_client_components_goods_min_js-src_config_js.bundle.js.map

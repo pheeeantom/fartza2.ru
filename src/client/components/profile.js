@@ -5,6 +5,8 @@ import { useFetchGoodsByNickQuery } from "../store/services/goods_service";
 import { Rating } from 'flowbite-react';
 import { useEffect } from "react";
 
+import { pageSize } from "../../config";
+
 function Profile(props) {
 
     const { data, isLoading, error } = useFetchUserByNickQuery(window.location.pathname.split('/').pop() || window.location.pathname.split('/').slice(0, -1).pop())
@@ -69,8 +71,8 @@ function Profile(props) {
                         <div className={"text-xl inline-block p-1 mx-2 " + (activeTab === 3 ? "bg-neutral-400" : "bg-neutral-300")} onClick={() => setActiveTab(3)}>Избранное</div>
                     </div> : null}
                     <div className={activeTab === 0 ? "block" : "hidden"}>
-                        <div className="w-11/12 md:w-3/5 inline-block"><GoodsMin pageSize={2} option={"profile"}/></div>
-                        <div className="w-full md:w-2/5 inline-block float-right pl-16 pt-10">
+                        <div className="w-11/12 md:w-3/5 md:inline-block"><GoodsMin pageSize={pageSize / 2} option={"profile"}/></div>
+                        <div className="w-full md:w-2/5 md:inline-block md:float-right pl-16 pt-10">
                             <div>
                                 <h3 className="inline-block text-5xl align-top" style={{height: '115px'}}>{data.user[0][0].nickname}</h3>
                                 <img className="inline-block float-right mr-10" width="115" height="115" src={data.user[0][0].avatar ? "/avatars/" + data.user[0][0].avatar : "/service_photos/default_avatar.jpg"} alt="avatar"/>
@@ -149,7 +151,7 @@ function Profile(props) {
                         </div>)}
                     </div>
                     <div className={activeTab === 3 ? "block" : "hidden"}>
-                        <GoodsMin pageSize={4} option={"favorites"}/>
+                        <GoodsMin pageSize={pageSize} option={"favorites"}/>
                     </div>
                 </div>
             }
