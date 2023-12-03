@@ -447,6 +447,7 @@ function Product(props) {
     className: "text-muted"
   }, errorComs.data.error) : coms.comments[0].rows.map(function (com) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Comment, {
+      key: "Comment-".concat(com.id),
       text: com.text,
       createdAt: com.created_at,
       nick: com.user.nickname,

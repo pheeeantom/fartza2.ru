@@ -213,7 +213,7 @@ function Product (props) {
 								'Подождите, идет загрузка...' :
 							errorComs ?
 								<small className="text-muted">{errorComs.data.error}</small> : 
-								coms.comments[0].rows.map(com => <Comment text={com.text} createdAt={com.created_at}
+								coms.comments[0].rows.map(com => <Comment key={`Comment-${com.id}`} text={com.text} createdAt={com.created_at}
 									nick={com.user.nickname} avatar={com.user.avatar}/>)}
 						{errorComs ? null : (
 							<div>

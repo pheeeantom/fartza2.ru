@@ -33,7 +33,7 @@ const storage = multer.memoryStorage(/*{
     }
 }*/);
 
-exports.multi_upload = multer({
+var multi_upload = multer({
     storage,
     limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
     fileFilter: (req, file, cb) => {
@@ -47,6 +47,8 @@ exports.multi_upload = multer({
         }
     },
 }).array('images', 3)
+
+exports.multi_upload = multi_upload;
 
 exports.getPage = (request, response, next) => {
     var lat = parseFloat(request.query.lat);

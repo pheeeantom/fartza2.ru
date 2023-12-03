@@ -106,7 +106,7 @@ function GoodsMin(props) {
     else
         query = useFetchAllGoodsQuery
 
-    const { data, error, isLoading } = query(props.option !== "profile" ? lastArgs : { ...lastArgs, nick: window.location.pathname.split('/').pop() || window.location.pathname.split('/').slice(0, -1).pop()})
+    const { data, error, isLoading, isError, isFetching } = query(props.option !== "profile" ? lastArgs : { ...lastArgs, nick: window.location.pathname.split('/').pop() || window.location.pathname.split('/').slice(0, -1).pop()})
 
 	//componentDidUpdate(prevProps) {
 		/*let fetch = this.props.lastArgs?.category ? this.props.fetchAllGoodsCatsState : this.props.fetchAllGoodsState
@@ -267,13 +267,13 @@ function GoodsMin(props) {
 			</div>
 		);*/
 		//console.log(this.state.goods);
-		let rows = [];
+		//let rows = [];
 		/*let count;*/
 		//let fetchAllGoodsState = goodsAPI.endpoints.fetchAllGoods;
 		//console.log(fetchAllGoodsState.select(this.state.lastArgs)(store.getState()));
 		//console.log(fetchAllGoodsState);
 		//console.log(this.state.lastArgs);
-		if (isLoading) {
+		/*if (isLoading) {
 			rows = isLoading;
 		}
 		else if (error) {
@@ -281,17 +281,17 @@ function GoodsMin(props) {
 		}
 		else if (data) {
 			if (props.option === "favorites") {
-				rows = data.favorites[0][0].rows.map((fav) => <MyCard id={fav.good.id} name={fav.good.name} img={fav.good.photos} price={fav.good.price}
+				rows = data.favorites[0][0].rows.map((fav) => <MyCard key={`MyCard1-${fav.good.id}`} id={fav.good.id} name={fav.good.name} img={fav.good.photos} price={fav.good.price}
 					createdAt={fav.good.created_at} nickname={fav.good.user?.nickname}
 					rating={fav.good.user?.rating} distance={fav.good.distance} key={fav.good.id} isByNick={props.option === "profile"} />);
 			}
 			else {
-				rows = data.goods[0].rows.map((goods) => <MyCard id={goods.id} name={goods.name} img={goods.photos} price={goods.price}
+				rows = data.goods[0].rows.map((goods) => <MyCard key={`MyCard2-${fav.good.id}`} id={goods.id} name={goods.name} img={goods.photos} price={goods.price}
 					createdAt={goods.created_at} nickname={goods.user?.nickname}
 					rating={goods.user?.rating} distance={goods.distance} key={goods.id} isByNick={props.option === "profile"}
 					isAuthorized={data.authorized} />);
 			}
-		}
+		}*/
 
 		//console.log(this.props.fetchAllGoodsState(this.props.lastArgs));
 		
@@ -305,7 +305,17 @@ function GoodsMin(props) {
 			//<div className="col-xs-12 col-sm-12 col-md-8 col-lg-9 mb-3 mt-3">
 			<>
 				<main id={props.option !== "profile" ? "goods-min" : "profile-goods-min"}>
-			  		{rows}
+				{error ? error.data.error : isLoading ? isLoading : !isError && !isFetching ? (
+					props.option === "favorites" ?
+							data.favorites[0][0].rows.map((fav) => <MyCard id={fav.good.id} key={'MyCard1-' + fav.good.id} name={fav.good.name} img={fav.good.photos} price={fav.good.price}
+									createdAt={fav.good.created_at} nickname={fav.good.user?.nickname}
+									rating={fav.good.user?.rating} distance={fav.good.distance} isByNick={props.option === "profile"} />)
+					:
+							data.goods[0].rows.map((goods) => <MyCard id={goods.id} key={'MyCard2-' + goods.id} name={goods.name} img={goods.photos} price={goods.price}
+									createdAt={goods.created_at} nickname={goods.user?.nickname}
+									rating={goods.user?.rating} distance={goods.distance} isByNick={props.option === "profile"}
+									isAuthorized={data.authorized} />)
+				) : null}
 				</main>
 				{error ? null : (
 					<div className={props.pageSize === pageSize / 2 ? "pl-7" : null}>
@@ -396,7 +406,7 @@ function MyCard(props) {
 					</form>
 				</> : null}
 				<Carousel className="goods-carousel" slide={false} indicators={false}>
-					{props.img.map(img => <img src={"/goods_photos/" + img} alt="slide" />)}
+					{props.img.map(img => <img src={"/goods_photos/" + img} key={img} alt="slide" />)}
 				</Carousel>
 				<a href={"/goods/" + props.id} target="_blank" style={{color: "black"}}><h5 className="break-words">{props.name.length > 45 ? props.name.substring(0, 20) + "..." : props.name}</h5></a>
 				{props.price ? <p>{props.price + "₽"}</p> : null}

@@ -23,7 +23,7 @@ const storage = multer.memoryStorage(/*{
     }
 }*/);
 
-exports.multi_upload = multer({
+var multi_upload = multer({
     storage,
     limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
     fileFilter: (req, file, cb) => {
@@ -37,6 +37,8 @@ exports.multi_upload = multer({
         }
     },
 }).single("photo")
+
+exports.multi_upload = multi_upload;
 
 exports.getSingle = (request, response, login, next) => {
     Users.findOne({where: {nickname: request.params["nick"]}}).then(result => {

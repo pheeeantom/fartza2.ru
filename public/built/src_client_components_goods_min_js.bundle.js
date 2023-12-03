@@ -130,7 +130,9 @@ function GoodsMin(props) {
     })),
     data = _query.data,
     error = _query.error,
-    isLoading = _query.isLoading;
+    isLoading = _query.isLoading,
+    isError = _query.isError,
+    isFetching = _query.isFetching;
 
   //componentDidUpdate(prevProps) {
   /*let fetch = this.props.lastArgs?.category ? this.props.fetchAllGoodsCatsState : this.props.fetchAllGoodsState
@@ -294,52 +296,31 @@ function GoodsMin(props) {
   	</div>
   );*/
   //console.log(this.state.goods);
-  var rows = [];
+  //let rows = [];
   /*let count;*/
   //let fetchAllGoodsState = goodsAPI.endpoints.fetchAllGoods;
   //console.log(fetchAllGoodsState.select(this.state.lastArgs)(store.getState()));
   //console.log(fetchAllGoodsState);
   //console.log(this.state.lastArgs);
-  if (isLoading) {
-    rows = isLoading;
-  } else if (error) {
-    rows = error.data.error;
-  } else if (data) {
-    if (props.option === "favorites") {
-      rows = data.favorites[0][0].rows.map(function (fav) {
-        var _fav$good$user, _fav$good$user2;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(MyCard, {
-          id: fav.good.id,
-          name: fav.good.name,
-          img: fav.good.photos,
-          price: fav.good.price,
-          createdAt: fav.good.created_at,
-          nickname: (_fav$good$user = fav.good.user) === null || _fav$good$user === void 0 ? void 0 : _fav$good$user.nickname,
-          rating: (_fav$good$user2 = fav.good.user) === null || _fav$good$user2 === void 0 ? void 0 : _fav$good$user2.rating,
-          distance: fav.good.distance,
-          key: fav.good.id,
-          isByNick: props.option === "profile"
-        });
-      });
-    } else {
-      rows = data.goods[0].rows.map(function (goods) {
-        var _goods$user, _goods$user2;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(MyCard, {
-          id: goods.id,
-          name: goods.name,
-          img: goods.photos,
-          price: goods.price,
-          createdAt: goods.created_at,
-          nickname: (_goods$user = goods.user) === null || _goods$user === void 0 ? void 0 : _goods$user.nickname,
-          rating: (_goods$user2 = goods.user) === null || _goods$user2 === void 0 ? void 0 : _goods$user2.rating,
-          distance: goods.distance,
-          key: goods.id,
-          isByNick: props.option === "profile",
-          isAuthorized: data.authorized
-        });
-      });
-    }
+  /*if (isLoading) {
+  	rows = isLoading;
   }
+  else if (error) {
+  	rows = error.data.error;
+  }
+  else if (data) {
+  	if (props.option === "favorites") {
+  		rows = data.favorites[0][0].rows.map((fav) => <MyCard key={`MyCard1-${fav.good.id}`} id={fav.good.id} name={fav.good.name} img={fav.good.photos} price={fav.good.price}
+  			createdAt={fav.good.created_at} nickname={fav.good.user?.nickname}
+  			rating={fav.good.user?.rating} distance={fav.good.distance} key={fav.good.id} isByNick={props.option === "profile"} />);
+  	}
+  	else {
+  		rows = data.goods[0].rows.map((goods) => <MyCard key={`MyCard2-${fav.good.id}`} id={goods.id} name={goods.name} img={goods.photos} price={goods.price}
+  			createdAt={goods.created_at} nickname={goods.user?.nickname}
+  			rating={goods.user?.rating} distance={goods.distance} key={goods.id} isByNick={props.option === "profile"}
+  			isAuthorized={data.authorized} />);
+  	}
+  }*/
 
   //console.log(this.props.fetchAllGoodsState(this.props.lastArgs));
 
@@ -352,7 +333,36 @@ function GoodsMin(props) {
     //<div className="col-xs-12 col-sm-12 col-md-8 col-lg-9 mb-3 mt-3">
     react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("main", {
       id: props.option !== "profile" ? "goods-min" : "profile-goods-min"
-    }, rows), error ? null : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    }, error ? error.data.error : isLoading ? isLoading : !isError && !isFetching ? props.option === "favorites" ? data.favorites[0][0].rows.map(function (fav) {
+      var _fav$good$user, _fav$good$user2;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(MyCard, {
+        id: fav.good.id,
+        key: 'MyCard1-' + fav.good.id,
+        name: fav.good.name,
+        img: fav.good.photos,
+        price: fav.good.price,
+        createdAt: fav.good.created_at,
+        nickname: (_fav$good$user = fav.good.user) === null || _fav$good$user === void 0 ? void 0 : _fav$good$user.nickname,
+        rating: (_fav$good$user2 = fav.good.user) === null || _fav$good$user2 === void 0 ? void 0 : _fav$good$user2.rating,
+        distance: fav.good.distance,
+        isByNick: props.option === "profile"
+      });
+    }) : data.goods[0].rows.map(function (goods) {
+      var _goods$user, _goods$user2;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(MyCard, {
+        id: goods.id,
+        key: 'MyCard2-' + goods.id,
+        name: goods.name,
+        img: goods.photos,
+        price: goods.price,
+        createdAt: goods.created_at,
+        nickname: (_goods$user = goods.user) === null || _goods$user === void 0 ? void 0 : _goods$user.nickname,
+        rating: (_goods$user2 = goods.user) === null || _goods$user2 === void 0 ? void 0 : _goods$user2.rating,
+        distance: goods.distance,
+        isByNick: props.option === "profile",
+        isAuthorized: data.authorized
+      });
+    }) : null), error ? null : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: props.pageSize === _config__WEBPACK_IMPORTED_MODULE_8__.pageSize / 2 ? "pl-7" : null
     }, data && count > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
       onClick: function onClick() {
@@ -467,6 +477,7 @@ function MyCard(props) {
     }, props.img.map(function (img) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
         src: "/goods_photos/" + img,
+        key: img,
         alt: "slide"
       });
     })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
